@@ -166,4 +166,9 @@ public class UserController {
         return regionRepo.findAll();
     }
 
+    @GetMapping("/")
+    public Page<Category> getCategoryPage(@RequestParam int page, @RequestParam int size){
+        return categoryService.findAll(page, size);
+    }
+
 }
