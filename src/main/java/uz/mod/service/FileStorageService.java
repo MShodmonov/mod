@@ -5,8 +5,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import uz.mod.entity.Category;
@@ -19,13 +23,12 @@ import uz.mod.repository.ImageRepo;
 import uz.mod.repository.PdfRepo;
 import uz.mod.utils.FileStorageProperties;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -43,17 +46,20 @@ public class FileStorageService {
     @Autowired
     public FileStorageService(FileStorageProperties fileStorageLocation) {
         this.fileStorageLocation = Paths.get(fileStorageLocation.getUploadDir()).toAbsolutePath().normalize();
-
         try {
-            Files.createDirectories(this.fileStorageLocation);
+            if (!Files.exists(this.fileStorageLocation))
+                Files.createDirectory(this.fileStorageLocation);
+
+
+            // Files.createDirectories(this.fileStorageLocation);
         } catch (IOException e) {
             throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", e);
         }
     }
 
-    public String storeFile(MultipartFile multipartFile){
+    public String storeImage(MultipartFile multipartFile){
 
-        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        String fileName = StringUtils.cleanPath(UUID.randomUUID().toString()+"."+multipartFile.getContentType().substring(6));
         try {
         if (fileName.contains("..")) {
             throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
@@ -61,6 +67,20 @@ public class FileStorageService {
         Path targetLocation = this.fileStorageLocation.resolve(fileName);
 
         Files.copy(multipartFile.getInputStream(),targetLocation, StandardCopyOption.REPLACE_EXISTING);
+            return fileName;
+        } catch (IOException e) {
+            throw new FileStorageException("Could not store file " + fileName + ". Please try again!", e);
+        }
+    }public String storePdf(MultipartFile multipartFile){
+
+        String fileName = StringUtils.cleanPath(UUID.randomUUID().toString()+"."+multipartFile.getContentType().substring(12));
+        try {
+            if (fileName.contains("..")) {
+                throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
+            }
+            Path targetLocation = this.fileStorageLocation.resolve(fileName);
+
+            Files.copy(multipartFile.getInputStream(),targetLocation, StandardCopyOption.REPLACE_EXISTING);
             return fileName;
         } catch (IOException e) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", e);
@@ -89,16 +109,16 @@ public class FileStorageService {
     }
 
     public Image saveImageFile(MultipartFile file){
-        String storeFileName = storeFile(file);
+        String storeFileName = storeImage(file);
 
         String filepath = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/api/image/")
                 .path(storeFileName)
                 .toUriString();
-            return imageRepo.save(new Image(file.getOriginalFilename(),file.getSize(),file.getContentType(),filepath));
+            return imageRepo.save(new Image(storeFileName,file.getSize(),file.getContentType(),filepath));
     }
     public Pdf savePdfFile(MultipartFile file){
-        String storeFileName = storeFile(file);
+        String storeFileName = storePdf(file);
 
         String filepath = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/api/image/")
@@ -180,6 +200,58 @@ public class FileStorageService {
         }catch (Exception e) {
             throw new ResourceNotFoundException("This pdf does not exist",e.getCause());
         }
+
+    }
+
+    public ResponseEntity<Resource> downloadFile( String filename, HttpServletRequest request)
+    {
+        Resource resource = loadFileAsResource(filename);
+
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        if (contentType == null)
+        {
+            contentType = "application/octet-stream";
+        }
+
+        try {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .contentLength(resource.contentLength())
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + resource.getFilename() + "\"")
+                    .body(resource);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new ResourceNotFoundException("not found");
+        }
+
+
+    }
+    public ResponseEntity<Resource> downloadFileToApp(String filename, HttpServletRequest request)
+    {
+        Resource resource = loadFileAsResource(filename);
+
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        if (contentType == null)
+        {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                //   .header(HttpHeaders.CONTENT_DISPOSITION,"attachment: filename =\"" +resource.getFilename() +"\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION,"inline")
+                .body(resource);
+
 
     }
 

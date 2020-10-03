@@ -21,11 +21,10 @@ public class ImageController {
     @Autowired
     private FileStorageService fileStorageService;
 
-    @Autowired
-    private FileController fileController;
+
 
     @PostMapping("/")
-    public Image postImage(@RequestBody MultipartFile multipartFile){
+    public Image postImage(@RequestBody(required = true) MultipartFile multipartFile){
        return fileStorageService.saveImageFile(multipartFile);
     }
     @GetMapping("/{id}")
@@ -39,7 +38,7 @@ public class ImageController {
     }
 
     @PutMapping("/edit/{id}")
-    public Image editImage(@PathVariable UUID id,@RequestBody MultipartFile multipartFile){
+    public Image editImage(@PathVariable UUID id,@RequestBody(required = true) MultipartFile multipartFile){
 
         ////////////////////////////
         Image image = fileStorageService.saveImageFile(multipartFile);
@@ -54,7 +53,7 @@ public class ImageController {
     @GetMapping("/download/{id}")
     public ResponseEntity<Resource> downloadImageById(@PathVariable UUID id, HttpServletRequest httpServletRequest){
         Image image = fileStorageService.getImage(id);
-        return fileController.downloadFile(image.getFileName(),httpServletRequest);
+        return fileStorageService.downloadFileToApp(image.getFileName(),httpServletRequest);
     }
 
 
