@@ -58,5 +58,11 @@ public class PdfController {
         return fileStorageService.downloadFile(pdf.getFileName(),httpServletRequest);
     }
 
+    @GetMapping("/download/app/{id}")
+    public ResponseEntity<Resource> downloadPdfByIdToApp(@PathVariable UUID id, HttpServletRequest httpServletRequest){
+        Pdf pdf = fileStorageService.getPdf(id);
+        return fileStorageService.downloadFileToApp(pdf.getFileName(),httpServletRequest);
+    }
+
 
 }

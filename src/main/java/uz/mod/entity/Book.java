@@ -29,6 +29,7 @@ public class Book extends AbstractEntity {
     @OneToMany(mappedBy = "book")
     private List<PostBook> postBooks;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @OneToOne(fetch = FetchType.EAGER)
