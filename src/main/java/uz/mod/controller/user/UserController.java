@@ -114,21 +114,25 @@ public class UserController {
     public Page<Book> getBookPage(@RequestParam int page, @RequestParam int size) {
         return bookService.findAll(page, size);
     }
+    @GetMapping("/{id}")
+    public Subject getSubject(@PathVariable UUID id){
+        return subjectService.findById(id);
+    }
 
-    @GetMapping("/subject/category/{id}}")
-    List<Subject> getSubjectByCategory(@PathVariable UUID uuid) {
-        Category category = categoryService.findById(uuid);
+    @GetMapping("/subject/category/{id}")
+    List<Subject> getSubjectByCategory(@PathVariable UUID id) {
+        Category category = categoryService.findById(id);
         return subjectService.getSubjectsByCategory(category);
     }
 
-    @GetMapping("/conception/subject/{id}}")
-    List<Conception> getConceptionBySubject(@PathVariable UUID uuid) {
+    @GetMapping("/conception/subject/{id}")
+    List<Conception> getConceptionBySubject(@PathVariable(name = "id") UUID uuid) {
         Subject subject = subjectService.findById(uuid);
         return conceptionService.getConceptionBySubject(subject);
     }
 
     @GetMapping("/conception/category/{id}")
-    List<Conception> getConceptionByCategory(@PathVariable UUID uuid) {
+    List<Conception> getConceptionByCategory(@PathVariable(name = "id") UUID uuid) {
         Category category = categoryService.findById(uuid);
         return conceptionService.getConceptionByCategory(category);
     }
@@ -154,7 +158,7 @@ public class UserController {
     }
 
     @GetMapping("/district/region/{id}")
-    public List<District> getDistrictByRegion(@PathVariable UUID uuid) {
+    public List<District> getDistrictByRegion(@PathVariable(name = "id") UUID uuid) {
         Optional<Region> optionalRegion = regionRepo.findById(uuid);
         if (optionalRegion.isPresent())
             return districtRepo.getAllByRegion(optionalRegion.get());

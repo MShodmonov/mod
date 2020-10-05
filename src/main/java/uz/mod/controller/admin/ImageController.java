@@ -47,8 +47,7 @@ public class ImageController {
     @DeleteMapping("/delete/{id}")////////////////////
     public Result deletePostBook(@PathVariable UUID id){
         Image pdf = fileStorageService.getImage(id);
-        fileStorageService.deleteFile(pdf.getFileName());
-        return new Result(fileStorageService.deleteImage(id));
+        return new Result(fileStorageService.deleteFile(pdf.getFileName()));
     }
     @GetMapping("/download/{id}")
     public ResponseEntity<Resource> downloadImageById(@PathVariable UUID id, HttpServletRequest httpServletRequest){
