@@ -27,6 +27,7 @@ public class District extends AbstractEntity {
 
 
 
+    @JsonIgnore
     @ManyToOne
     private Region region;
 

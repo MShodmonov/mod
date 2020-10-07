@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import uz.mod.entity.PostBook;
-import uz.mod.entity.PostConception;
 import uz.mod.payload.PostBookModel;
 import uz.mod.payload.Result;
 import uz.mod.service.PostBookService;
@@ -27,9 +26,10 @@ public class PostBookController {
     public PostBook getPostBook(@PathVariable UUID id){
         return postBookService.findById(id);
     }
+
     @GetMapping("/")
     public Page<PostBook> getPostBookPage(@RequestParam int page, @RequestParam int size){
-        return postBookService.findAll(page, size);
+        return postBookService.findAllEnabled(page, size);
     }
     @PutMapping("/edit/{id}")
     public PostBookModel editPostBook(@PathVariable UUID id, @RequestBody PostBookModel postBookMo){

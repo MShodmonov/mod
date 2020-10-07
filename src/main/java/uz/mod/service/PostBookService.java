@@ -69,6 +69,10 @@ public class PostBookService {
         PageRequest of = PageRequest.of(page, size);
         return postBookRepo.findAll(of);
     }
+    public Page<PostBook> findAllEnabled(int page, int size){
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return postBookRepo.findAllByIsEnabledTrue(pageRequest);
+    }
 
     public PostBook findById(UUID id){
         return postBookRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("This post for book does not exist"));
@@ -98,7 +102,7 @@ public class PostBookService {
 
     public Page<PostBook>getNewPosts(int page, int size){
         PageRequest pageRequest = PageRequest.of(page, size);
-        return postBookRepo.findAllByIsEnabled(false,pageRequest);
+        return postBookRepo.findAllByIsEnabledFalse(pageRequest);
     }
     public Long getPostCount(){
         return postBookRepo.count();

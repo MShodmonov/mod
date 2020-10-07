@@ -30,47 +30,57 @@ public class BookService {
     private ImageRepo imageRepo;
 
 
-    public Book save(Book book){
+    public Book save(Book book) {
         try {
             return bookRepo.save(book);
-        }catch (Exception e){
-            throw new PersistenceException("persistence failed",e.getCause());
+        } catch (Exception e) {
+            throw new PersistenceException("persistence failed", e.getCause());
         }
-    }
-    public Book edit(UUID id,Book book){
-            Book bookByRepo = bookRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("This book does not exist"));
-            bookByRepo.setDescription(book.getDescription());
-        Optional<Image> optionalImage = imageRepo.findById(bookByRepo.getImage().getId());
-        if (optionalImage.isPresent())
-        if (!optionalImage.get().getId().equals(book.getImage().getId())){
-            imageRepo.delete(optionalImage.get());
-            bookByRepo.setImage(book.getImage());
-        }
-            bookByRepo.setNameRu(book.getNameRu());
-            bookByRepo.setNameUz(book.getNameUz());
-        Optional<Pdf> optionalPdf = pdfRepo.findById(bookByRepo.getPdf().getId());
-        if (!optionalPdf.get().equals(book.getPdf().getId())){
-            pdfRepo.delete(optionalPdf.get());
-            bookByRepo.setPdf(book.getPdf());
-        }
-        return bookRepo.save(bookByRepo);
     }
 
-    public Page<Book>findAll(int page, int size){
+    public Book edit(UUID id, Book book) {
+        Book bookByRepo = bookRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("This book does not exist"));
+        bookByRepo.setDescription(book.getDescription());
+        bookByRepo.setNameRu(book.getNameRu());
+        bookByRepo.setNameUz(book.getNameUz());
+
+        Optional<Image> optionalImage = imageRepo.findById(bookByRepo.getImage().getId());
+
+
+        Optional<Pdf> optionalPdf = pdfRepo.findById(bookByRepo.getPdf().getId());
+
+        bookByRepo.setImage(book.getImage());
+        bookByRepo.setPdf(book.getPdf());
+        Book save = bookRepo.save(bookByRepo);
+        if (optionalImage.isPresent())
+            if (!optionalImage.get().getId().equals(book.getImage().getId())) {
+                imageRepo.delete(optionalImage.get());
+
+            }
+        if (optionalPdf.isPresent())
+        if (!optionalPdf.get().getId().equals(book.getPdf().getId())) {
+            pdfRepo.delete(optionalPdf.get());
+
+        }
+
+        return save;
+    }
+
+    public Page<Book> findAll(int page, int size) {
         PageRequest of = PageRequest.of(page, size);
         return bookRepo.findAll(of);
     }
 
-    public Book findById(UUID id){
+    public Book findById(UUID id) {
         return bookRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("This book does not exist"));
     }
 
-    public Boolean delete(UUID uuid){
+    public Boolean delete(UUID uuid) {
         try {
             bookRepo.deleteById(uuid);
             return true;
-        }catch (Exception e) {
-            throw new ResourceNotFoundException("This book does not exist",e.getCause());
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("This book does not exist", e.getCause());
         }
     }
 }

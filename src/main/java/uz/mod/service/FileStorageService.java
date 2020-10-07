@@ -112,7 +112,7 @@ public class FileStorageService {
         String storeFileName = storeImage(file);
 
         String filepath = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/image/download/")
+                .path("/api/admin/image/download/")
                 .path(storeFileName)
                 .toUriString();
             return imageRepo.save(new Image(storeFileName,file.getSize(),file.getContentType(),filepath));
@@ -121,7 +121,7 @@ public class FileStorageService {
         String storeFileName = storePdf(file);
 
         String filepath = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/pdf/download/")
+                .path("/api/admin/pdf/download/")
                 .path(storeFileName)
                 .toUriString();
         return pdfRepo.save(new Pdf(storeFileName,file.getSize(),file.getContentType(),filepath));
