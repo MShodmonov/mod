@@ -1,6 +1,7 @@
 package uz.mod.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +11,7 @@ import uz.mod.entity.abstractEntityLayer.AbstractEntity;
 import uz.mod.payload.PostConceptionModel;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
 @EqualsAndHashCode(callSuper = true)
@@ -36,7 +38,8 @@ public class PostConception extends AbstractEntity {
 
     private Boolean isFavourite;
 
-    @ManyToOne(optional = true)
+
+    @ManyToOne(optional = true,fetch = FetchType.EAGER)
     private Conception conception;
 
 

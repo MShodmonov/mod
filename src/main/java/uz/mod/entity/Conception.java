@@ -25,6 +25,7 @@ public class Conception extends AbstractEntity {
     private String conceptName;
 
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "conceptionList",cascade = { CascadeType.ALL })
     private List<Subject> subjects;
 
