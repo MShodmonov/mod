@@ -97,7 +97,7 @@ public class PostConceptionService {
         List<Category> categoryList = categoryRepo.findAll();
         List<PostCount> countList = new LinkedList<>();
         for ( Category category : categoryList){
-            countList.add(new PostCount(category.getId(),postConceptionRepo.countByConception_Category(category)));
+            countList.add(new PostCount(category.getNameUz(),category.getNameRu(),postConceptionRepo.countByConception_Category(category)));
         }
         return countList;
     }

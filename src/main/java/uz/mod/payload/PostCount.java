@@ -11,7 +11,11 @@ import java.util.UUID;
 @NoArgsConstructor
 public class PostCount {
 
-    private UUID uuid;
+    private String nameUz;
+
+    private String nameRu;
 
     private Integer count;
+
+
 }
