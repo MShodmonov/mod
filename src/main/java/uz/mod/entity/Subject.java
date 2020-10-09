@@ -23,18 +23,23 @@ import static javax.persistence.CascadeType.ALL;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Subject extends AbstractEntity {
 
-    @NotNull
+
     private String subjectName;
 
+
+    private String subjectNameRu;
+
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "subject_conception", joinColumns = @JoinColumn(referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "conception_id"))
+   @OneToMany(mappedBy = "subject")
     private List<Conception> conceptionList = new LinkedList<>();
 
 
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Category categories;
 
-
+    public Subject(String subjectName,String subjectNameRu, Category categories ) {
+        this.subjectName = subjectName;
+        this.subjectNameRu = subjectNameRu;
+        this.categories = categories;
+    }
 }

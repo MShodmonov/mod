@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import uz.mod.entity.abstractEntityLayer.AbstractEntity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -31,6 +32,7 @@ public class PostBook extends AbstractEntity {
 
     private Boolean isEnabled;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private Boolean isFavourite;

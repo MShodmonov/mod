@@ -5,6 +5,7 @@
 //import org.springframework.security.crypto.password.PasswordEncoder;
 //import org.springframework.stereotype.Component;
 //
+//import org.springframework.transaction.annotation.Transactional;
 //import uz.mod.entity.*;
 //import uz.mod.entity.enums.RoleEnumeration;
 //import uz.mod.repository.*;
@@ -59,6 +60,7 @@
 //
 //
 //    @Override
+//    @Transactional
 //    public void run(String... args) throws Exception {
 //        Role user = new Role(RoleEnumeration.ROLE_USER);
 //        Role admin = new Role(RoleEnumeration.ROLE_ADMIN);
@@ -68,31 +70,45 @@
 //        roleRepository.save(user);
 //        roleRepository.save(admin);
 //
-//        Category category = categoryRepo.save(new Category("Algebra","Algebra in russian"));
-//        Conception conception = conceptionRepo.save(new Conception("1. conception",category));
-//        Conception conception1 = conceptionRepo.save(new Conception("2. conception",category));
-//        Conception conception2 = conceptionRepo.save(new Conception("3. conception",category));
-//        Conception conception3 = conceptionRepo.save(new Conception("4. conception",category));
+//        Category category1 = categoryRepo.save(new Category("Language","Language in russian"));
+//        Category category2 = categoryRepo.save(new Category("Exact subject","Exact subject in russian"));
+//        Category category3 = categoryRepo.save(new Category("Some Cat","Some Cat in russian"));
+//        Subject subject1 = subjectRepo.save(new Subject("English 10 th grade","English 10 th grade",category1));
+//        Subject subject2 = subjectRepo.save(new Subject("Algebra 10 th grade","Algebra 10 th grade",category2));
+//        Subject subject3 = subjectRepo.save(new Subject("History 10 th grade","History 10 th grade",category3));
+//        Subject subject4 = subjectRepo.save(new Subject("Russian 10 th grade","Russian 10 th grade",category1));
+//        Subject subject5 = subjectRepo.save(new Subject("Physics 10 th grade","Physics 10 th grade",category2));
+//        Subject subject6 = subjectRepo.save(new Subject("Philosophy 10 th grade","Philosophy 10 th grade",category3));
+//        Subject subject7 = subjectRepo.save(new Subject("Germany 10 th grade","Germany 10 th grade",category1));
+//        Subject subject8 = subjectRepo.save(new Subject("Geometry 10 th grade","Geometry 10 th grade",category2));
+//        Subject subject9 = subjectRepo.save(new Subject("Some Subject 10 th grade","Some Subject 10 th grade",category3));
+//        Subject subject10 = subjectRepo.save(new Subject("Spain 10 th grade","Spain 10 th grade",category1));
+//
+//
+//        Conception conception = conceptionRepo.save(new Conception("1. conception","1. conception","1. conception",category1,subject1));
+//        Conception conception1 = conceptionRepo.save(new Conception("2. conception","2. conception","2. conception",category2,subject2));
+//        Conception conception2 = conceptionRepo.save(new Conception("3. conception","3. conception","3. conception",category3,subject3));
+//        Conception conception3 = conceptionRepo.save(new Conception("4. conception","4. conception","4. conception",category1,subject4));
+//        Conception conception4 = conceptionRepo.save(new Conception("1. conception","1. conception","1. conception",category2,subject2));
+//        Conception conception5 = conceptionRepo.save(new Conception("2. conception","2. conception","2. conception",category3,subject1));
+//        Conception conception6 = conceptionRepo.save(new Conception("3. conception","3. conception","3. conception",category1,subject10));
+//        Conception conception7 = conceptionRepo.save(new Conception("4. conception","4. conception","4. conception",category1,subject7));
+//        Conception conception8 = conceptionRepo.save(new Conception("1. conception","1. conception","1. conception",category3,subject3));
+//        Conception conception9 = conceptionRepo.save(new Conception("2. conception","2. conception","2. conception",category3,subject3));
+//        Conception conception10 = conceptionRepo.save(new Conception("3. conception","3. conception","3. conception",category3,subject3));
+//        Conception conception11 = conceptionRepo.save(new Conception("4. conception","4. conception","4. conception",category3,subject3));
 //        List<Conception>list = new LinkedList<>();
 //        list.add(conception);
 //        list.add(conception1);
 //        list.add(conception2);
 //        list.add(conception3);
-////        List<District>listDistrict = new LinkedList<>();
-////        District district = districtRepo.save(new District("Chilonzor"));
-////        District district2 = districtRepo.save(new District("Yunusobod"));
-////        listDistrict.add(district);
-////        listDistrict.add(district2);
 //
 //
 //
-//      //  Region region = regionRepo.save(new Region("Toshkent shahar",listDistrict));
 //
 //
-//        Subject subject = subjectRepo.save(new Subject("Algebra 10 th grade", list,category));
 //
-////        PostConception postConception = postConceptionRepo.save(new PostConception("Musobek Shodmonov",district,region,"some school",true,"this is  TEST",false,conception));
-////        PostConception postConception2 = postConceptionRepo.save(new PostConception("Musobek Shodmonov",district,region,"some school",true,"this is  TEST",false,conception));
+//
 //
 //
 //

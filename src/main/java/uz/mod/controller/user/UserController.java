@@ -127,14 +127,12 @@ public class UserController {
 
     @GetMapping("/conception/subject/{id}")
     List<Conception> getConceptionBySubject(@PathVariable(name = "id") UUID uuid) {
-        Subject subject = subjectService.findById(uuid);
-        return conceptionService.getConceptionBySubject(subject);
+        return conceptionService.getConceptionBySubject(uuid);
     }
 
     @GetMapping("/conception/category/{id}")
-    List<Conception> getConceptionByCategory(@PathVariable(name = "id") UUID uuid) {
-        Category category = categoryService.findById(uuid);
-        return conceptionService.getConceptionByCategory(category);
+    private List<Conception> getConceptionByCategoryId(@PathVariable UUID id){
+        return conceptionService.getConceptionByCategoryId(id);
     }
 
     @PostMapping("/conception/post")
@@ -178,5 +176,11 @@ public class UserController {
     public Category getCategory(@PathVariable UUID id){
         return categoryService.findById(id);
     }
+
+    @GetMapping("/subject/list")
+    private List<Subject> getSubjectList(){
+        return subjectService.getAllSubject();
+    }
+
 
 }

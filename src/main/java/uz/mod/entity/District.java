@@ -31,4 +31,9 @@ public class District extends AbstractEntity {
     @ManyToOne
     private Region region;
 
+    public District(String nameUz ,String nameOz, String nameRu) {
+        this.nameUz = nameUz;
+        this.nameOz = nameOz;
+        this.nameRu = nameRu;
+    }
 }

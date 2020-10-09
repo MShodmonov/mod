@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uz.mod.entity.PostBook;
 import uz.mod.entity.PostConception;
 import uz.mod.exceptions.PersistenceException;
@@ -59,7 +60,7 @@ public class PostBookService {
         postBook.setRegion(regionRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("This Post for Book does not exist with the region")));
         postBook.setBook(bookRepo.findById(model.getBookId()).orElseThrow(() -> new ResourceNotFoundException("This Book for Book does not exist with the book id")));;
 
-        //ask
+
 
 
         return new PostBookModel(postBookRepo.save(postBook));
@@ -88,7 +89,7 @@ public class PostBookService {
     }
     public boolean setEnable(UUID uuid){
         try {
-            PostBook postBook = postBookRepo.findById(uuid).get();
+            PostBook postBook = postBookRepo.findById(uuid).orElseThrow(() -> new ResourceNotFoundException("This post for book does not exist"));
             postBook.setIsEnabled(true);
             postBookRepo.save(postBook);
             return true;
@@ -96,8 +97,28 @@ public class PostBookService {
             throw new ResourceNotFoundException("This post for book does not exist",e.getCause());
         }
     }
+    public boolean setFavourite(UUID uuid){
+        try {
+            PostBook postBook = postBookRepo.findById(uuid).orElseThrow(() -> new ResourceNotFoundException("This post for book does not exist"));
+            postBook.setIsFavourite(true);
+            postBookRepo.save(postBook);
+            return true;
+        }catch (Exception e) {
+            throw new ResourceNotFoundException("This post for book does not exist",e.getCause());
+        }
+    }
+    public boolean unSetFavourite(UUID uuid){
+        try {
+            PostBook postBook = postBookRepo.findById(uuid).orElseThrow(() -> new ResourceNotFoundException("This post for book does not exist"));
+            postBook.setIsFavourite(false);
+            postBookRepo.save(postBook);
+            return true;
+        }catch (Exception e) {
+            throw new ResourceNotFoundException("This post for book does not exist",e.getCause());
+        }
+    }
     public List<PostBook>findAllByIsFavourite(){
-        return postBookRepo.getAllByIsFavouriteOrderByCreatedByDesc(true);
+        return postBookRepo.getAllByIsFavouriteTrue();
     }
 
     public Page<PostBook>getNewPosts(int page, int size){
@@ -106,5 +127,15 @@ public class PostBookService {
     }
     public Long getPostCount(){
         return postBookRepo.count();
+    }
+
+    @Transactional
+    public Boolean makeEnableAll(){
+        List<PostBook> allByIsEnabled = postBookRepo.findAllByIsEnabled(Boolean.FALSE);
+        for (PostBook postBook : allByIsEnabled){
+            postBook.setIsEnabled(true);
+            postBookRepo.save(postBook);
+        }
+        return true;
     }
 }

@@ -44,7 +44,14 @@ public class PostBookController {
     public Result editEnablePost(@PathVariable UUID id){
         return new Result(postBookService.setEnable(id));
     }
-
+    @GetMapping("/favourite/{id}")
+    public Result makeFavourite(@PathVariable UUID id){
+        return new Result(postBookService.setFavourite(id));
+    }
+    @GetMapping("/unfavourite/{id}")
+    public Result makeUnfavorable(@PathVariable UUID id){
+        return new Result(postBookService.unSetFavourite(id));
+    }
     @GetMapping("/favourite")
     public List<PostBook> getPostBookPageByFavourite(){
         return postBookService.findAllByIsFavourite();
@@ -57,5 +64,10 @@ public class PostBookController {
     @GetMapping("/count")
     public Long getNewPosts(){
         return postBookService.getPostCount();
+    }
+
+    @GetMapping("/accept/all")
+    public Result acceptAllNewPost(){
+        return new Result(postBookService.makeEnableAll());
     }
 }

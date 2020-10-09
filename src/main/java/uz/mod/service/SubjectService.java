@@ -31,6 +31,7 @@ public class SubjectService {
     public Subject edit(UUID id, Subject subject){
         Subject subjectByRepo = subjectRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("This subject does not exist"));
        subjectByRepo.setSubjectName(subject.getSubjectName());
+       subjectByRepo.setSubjectNameRu(subject.getSubjectNameRu());
       // subjectByRepo.setConceptionList(subject.getConceptionList());
         return subjectRepo.save(subjectByRepo);
     }
@@ -54,5 +55,9 @@ public class SubjectService {
     }
     public List<Subject> getSubjectsByCategory(Category category){
         return subjectRepo.getAllByCategories(category);
+    }
+
+    public List<Subject> getAllSubject(){
+       return subjectRepo.findAll();
     }
 }

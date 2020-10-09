@@ -28,10 +28,8 @@ public class CategoryService {
     }
     public Category edit(UUID id, Category category){
         Category categoryByRepo  = categoryRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("This category does not exist"));
-        categoryByRepo.setConception(category.getConception());
         categoryByRepo.setNameRu(category.getNameRu());
         categoryByRepo.setNameUz(category.getNameUz());
-
         return categoryRepo.save(categoryByRepo);
     }
 

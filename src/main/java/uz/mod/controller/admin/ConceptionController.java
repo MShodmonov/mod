@@ -4,12 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import uz.mod.entity.Book;
+import uz.mod.entity.Category;
 import uz.mod.entity.Conception;
+import uz.mod.entity.Subject;
 import uz.mod.payload.Result;
 import uz.mod.repository.ConceptionRepo;
 import uz.mod.service.ConceptionService;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -37,7 +40,19 @@ public class ConceptionController {
         return conceptionService.edit(id, conception);
     }
     @DeleteMapping("/delete/{id}")////////////////////
-    public Result deleteConception(@PathVariable UUID id){
+    public Result deleteConception(@PathVariable UUID id)
+    {
         return new Result(conceptionService.delete(id));
     }
+
+    @GetMapping("/category/{id}")
+    private List<Conception> getConceptionByCategoryId(@PathVariable UUID id){
+        return conceptionService.getConceptionByCategoryId(id);
+    }
+    @GetMapping("/subject/{id}")
+    private List<Conception> getConceptionBySubjectId(@PathVariable UUID id){
+        return conceptionService.getConceptionBySubject(id);
+    }
+
+
 }

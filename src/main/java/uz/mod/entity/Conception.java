@@ -21,20 +21,31 @@ import java.util.List;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Conception extends AbstractEntity {
 
-    @NotNull
+
     private String conceptName;
 
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "conceptionList",cascade = { CascadeType.ALL })
-    private List<Subject> subjects;
+    private String conceptionNameRu;
+
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+
+
+    @ManyToOne
+    private Subject subject;
+
 
     @ManyToOne
     private Category category;
 
-    public Conception(String conceptName, Category category) {
+    public Conception(String conceptName,String conceptionNameRu, String description, Category category, Subject subject) {
         this.conceptName = conceptName;
+        this.conceptionNameRu = conceptionNameRu;
+        this.description = description;
         this.category = category;
+        this.subject = subject;
     }
 
     @JsonIgnore

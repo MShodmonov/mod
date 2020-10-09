@@ -34,6 +34,22 @@ public class PostConceptionController {
     public Page<PostConception> getPostConceptionPage(@RequestParam int page, @RequestParam int size){
         return postConceptionService.findAll(page, size);
     }
+    @GetMapping("/accepted")
+    public Page<PostConception> getAcceptedPostConceptionPage(@RequestParam int page, @RequestParam int size){
+        return postConceptionService.getAcceptedPosts(page, size);
+    }
+    @GetMapping("/favourite")
+    public List<PostConception> getFavouritePostConceptionPage(){
+        return postConceptionService.getFavourite();
+    }
+    @GetMapping("/favourite/{id}")
+    public Result makeFavourite(@PathVariable UUID id){
+        return new Result(postConceptionService.setEnable(id));
+    }
+    @GetMapping("/unfavourite/{id}")
+    public Result makeUnFavourite(@PathVariable UUID id){
+        return new Result(postConceptionService.setUnFavourite(id));
+    }
     @PutMapping("/edit/{id}")
     public PostConceptionModel editPostConception(@PathVariable UUID id,@RequestBody PostConceptionModel postConceptionModel){
         return postConceptionService.edit(id, postConceptionModel);
@@ -59,5 +75,9 @@ public class PostConceptionController {
     @GetMapping("/count/category")
     public List<PostCount> getPostCountByCategory(){
         return postConceptionService.countByCategory();
+    }
+    @GetMapping("/accept/all")
+    public Result acceptAllNewPost(){
+        return new Result(postConceptionService.makeEnableAll());
     }
 }

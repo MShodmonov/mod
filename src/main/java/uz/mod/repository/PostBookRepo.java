@@ -13,11 +13,14 @@ import java.util.UUID;
 
 public interface PostBookRepo extends JpaRepository<PostBook, UUID> {
 
-    List<PostBook>getAllByIsFavouriteOrderByCreatedByDesc(Boolean isFavourite);
+    List<PostBook>getAllByIsFavouriteTrue();
 
 
     Page<PostBook> findAllByIsEnabledTrue(Pageable pageRequest);
     Page<PostBook> findAllByIsEnabledFalse( Pageable pageRequest);
+    List<PostBook> findAllByIsEnabled(Boolean falseValue);
+
+
 
 
 }

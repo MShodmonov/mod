@@ -11,6 +11,7 @@ import uz.mod.service.PostConceptionService;
 import uz.mod.service.SubjectService;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -38,6 +39,11 @@ public class SubjectController {
     @DeleteMapping("/delete/{id}")////////////////////
     public Result deleteSubject(@PathVariable UUID id){
         return new Result(subjectService.delete(id));
+    }
+
+    @GetMapping("/list")
+    private List<Subject> getSubjectList(){
+        return subjectService.getAllSubject();
     }
 
 }

@@ -24,9 +24,6 @@ public class Category extends AbstractEntity {
     private String nameUz;
     private String nameRu;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "category")
-    private List<Conception>conception;
 
     public Category(String nameUz, String nameRu) {
         this.nameRu = nameRu;
@@ -36,6 +33,10 @@ public class Category extends AbstractEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "categories")
     private List<Subject>subjects;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "category")
+    private List<Conception>conceptions;
 
 
 }

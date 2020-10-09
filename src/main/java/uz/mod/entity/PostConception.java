@@ -1,8 +1,7 @@
 package uz.mod.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,6 +38,9 @@ public class PostConception extends AbstractEntity {
     private Boolean isFavourite;
 
 
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
+    @JsonProperty("conceptionId")
     @ManyToOne(optional = true,fetch = FetchType.EAGER)
     private Conception conception;
 

@@ -17,5 +17,7 @@ public class PostCount {
 
     private Integer count;
 
+    private UUID id;
+
 
 }
