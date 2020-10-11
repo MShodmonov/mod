@@ -1,6 +1,7 @@
 package uz.mod.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
@@ -9,6 +10,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,7 +27,9 @@ import uz.mod.repository.PdfRepo;
 import uz.mod.utils.FileStorageProperties;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.*;
@@ -222,7 +227,7 @@ public class FileStorageService {
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(contentType))
                     .contentLength(resource.contentLength())
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + resource.getFilename() + "\"")
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + resource.getFilename())
                     .body(resource);
         } catch (IOException e) {
             e.printStackTrace();
@@ -256,7 +261,24 @@ public class FileStorageService {
     }
 
 
-    public UUID saveFile(MultipartFile file) {
-        return null;
+
+
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public ResponseEntity<InputStreamResource> downloadToServer(UUID id, HttpServletResponse response) throws IOException {
+        Pdf attachment=pdfRepo.findById(id).get();
+        String path=this.fileStorageLocation.resolve(attachment.getFileName()).toString();
+        File file=new File(path);
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+        HttpHeaders header = new HttpHeaders();
+        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+attachment.getFileName());
+        header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        header.add("Pragma", "no-cache");
+        header.add("Expires", "0");
+        return ResponseEntity.ok()
+                .headers(header)
+                .contentLength(file.length())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
     }
+
 }

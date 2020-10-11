@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import uz.mod.entity.Book;
 import uz.mod.entity.Image;
 import uz.mod.entity.Pdf;
+import uz.mod.entity.Subject;
 import uz.mod.exceptions.PersistenceException;
 import uz.mod.exceptions.ResourceNotFoundException;
 import uz.mod.repository.BookRepo;
@@ -82,5 +83,25 @@ public class BookService {
         } catch (Exception e) {
             throw new ResourceNotFoundException("This book does not exist", e.getCause());
         }
+    }
+
+    public Book getFavouriteSubject(){
+        try {
+            return bookRepo.findAllByIsFavouriteTrueOrderByCreatedAtDesc().get(0);
+        }catch (NullPointerException e){
+            throw new ResourceNotFoundException("There is not any favourite Book");
+        }
+    }
+    public Boolean makeBookFavourite(UUID uuid){
+        Book book = findById(uuid);
+        book.setIsFavourite(true);
+        bookRepo.save(book);
+        return true;
+    }
+    public Boolean unmakeBookFavourite(UUID uuid){
+        Book book = findById(uuid);
+        book.setIsFavourite(false);
+        bookRepo.save(book);
+        return true;
     }
 }

@@ -30,7 +30,7 @@ public class Subject extends AbstractEntity {
     private String subjectNameRu;
 
     @JsonIgnore
-   @OneToMany(mappedBy = "subject")
+    @OneToMany(mappedBy = "subject")
     private List<Conception> conceptionList = new LinkedList<>();
 
 
