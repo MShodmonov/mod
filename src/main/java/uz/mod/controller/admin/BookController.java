@@ -39,6 +39,18 @@ public class BookController {
         return new Result(bookService.delete(id));
     }
 
+    @GetMapping("/favourite")
+    private Book getFavouriteBook(){
+        return bookService.getFavouriteSubject();
+    }
+    @GetMapping("/favourite/{id}")
+    private Result makeFavouriteBook(@PathVariable UUID id){
+        return new Result( bookService.makeBookFavourite(id));
+    }
+    @GetMapping("/unfavourite/{id}")
+    private Result unsetFavouriteSubject(@PathVariable UUID id){
+        return new Result( bookService.unmakeBookFavourite(id));
+    }
 
 
 }

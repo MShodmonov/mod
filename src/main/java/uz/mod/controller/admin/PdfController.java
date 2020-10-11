@@ -1,6 +1,7 @@
 package uz.mod.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,8 @@ import uz.mod.payload.Result;
 import uz.mod.service.FileStorageService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -52,9 +55,10 @@ public class PdfController {
     }
 
     @GetMapping("/download/{id}")
-    public ResponseEntity<Resource> downloadPdfById(@PathVariable UUID id, HttpServletRequest httpServletRequest){
-        Pdf pdf = fileStorageService.getPdf(id);
-        return fileStorageService.downloadFile(pdf.getFileName(),httpServletRequest);
+    public ResponseEntity<InputStreamResource> downloadPdfById(@PathVariable UUID id, HttpServletResponse response) throws IOException {
+//        Pdf pdf = fileStorageService.getPdf(id);
+//        return fileStorageService.downloadFile(pdf.getFileName(),httpServletRequest);
+       return fileStorageService.downloadToServer(id,response);
     }
 
     @GetMapping("/download/app/{id}")

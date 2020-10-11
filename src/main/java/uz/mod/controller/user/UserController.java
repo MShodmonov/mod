@@ -15,9 +15,9 @@ import uz.mod.exceptions.ResourceNotFoundException;
 import uz.mod.payload.PostBookModel;
 import uz.mod.payload.PostConceptionModel;
 import uz.mod.payload.PostCount;
+import uz.mod.payload.Result;
 import uz.mod.repository.DistrictRepo;
 import uz.mod.repository.PdfRepo;
-import uz.mod.repository.PostConceptionRepo;
 import uz.mod.repository.RegionRepo;
 import uz.mod.service.*;
 
@@ -70,6 +70,9 @@ public class UserController {
 
     @Autowired
     private RegionRepo regionRepo;
+
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping("/count/post")
     public List<PostCount> getPostsCount() {
@@ -181,6 +184,29 @@ public class UserController {
     private List<Subject> getSubjectList(){
         return subjectService.getAllSubject();
     }
+
+    @PostMapping("/email")
+    public Email postEmail(@Valid @RequestBody Email email){
+        return emailService.save(email);
+    }
+
+
+    ///main page dagi book uchun keyin ichidan imagine ni olasiz
+
+    @GetMapping("/favourite")
+    private Book getFavouriteBook(){
+        return bookService.getFavouriteSubject();
+    }
+
+    //Shahobbek bu mening api url im sizga kerak emas//
+    @GetMapping("/email/unsubscribe/{id}")
+    public Result sentEmailAboutBook(@PathVariable UUID id){
+        return new Result(emailService.delete(id));
+    }
+
+
+
+
 
 
 }

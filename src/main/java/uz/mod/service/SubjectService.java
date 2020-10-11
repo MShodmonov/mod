@@ -60,4 +60,6 @@ public class SubjectService {
     public List<Subject> getAllSubject(){
        return subjectRepo.findAll();
     }
+
+
 }

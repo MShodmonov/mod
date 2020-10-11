@@ -25,6 +25,8 @@ public class Book extends AbstractEntity {
 
     private String nameRu;
 
+    private Boolean isFavourite;
+
     @JsonIgnore
     @OneToMany(mappedBy = "book")
     private List<PostBook> postBooks;
