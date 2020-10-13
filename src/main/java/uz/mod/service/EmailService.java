@@ -39,7 +39,7 @@ public class EmailService {
             Email save = emailRepo.save(email);
             try {
                 sendWelcomeEmail(save);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.getCause();
             }
             return save;
@@ -196,8 +196,8 @@ public class EmailService {
                             "                        <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">" +
                             "                            <tr>" +
                             "                                <td style=\"color: #ffffff; font-family: Arial, sans-serif; font-size: 14px;\" width=\"75%\">" +
-                            "                                    &reg; Someone, somewhere 2020 "  +"<br/>" +
-                            "                                    <a href=\""+fullUrl+"\" style=\"color: #f50404;\"><font color=\"#f50404\">Unsubscribe</font></a> to this newsletter instantly" +
+                            "                                    &reg; Someone, somewhere 2020 " + "<br/>" +
+                            "                                    <a href=\"" + fullUrl + "\" style=\"color: #f50404;\"><font color=\"#f50404\">Unsubscribe</font></a> to this newsletter instantly" +
                             "                                </td>" +
                             " " +
                             "                            </tr>" +
@@ -217,11 +217,11 @@ public class EmailService {
         }
     }
 
-    public Boolean sentEmailAboutBook(UUID bookId){
+    public Boolean sentEmailAboutBook(UUID bookId) {
         Book book = bookRepo.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("This book does not exist"));
         List<Email> allEmails = emailRepo.findAll();
-        for (Email email: allEmails){
-            sendNewsEmail(email,book.getNameUz());
+        for (Email email : allEmails) {
+            sendNewsEmail(email, book.getNameUz());
         }
         return true;
     }

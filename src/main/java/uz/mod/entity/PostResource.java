@@ -7,10 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import uz.mod.entity.abstractEntityLayer.AbstractEntity;
-import uz.mod.payload.PostConceptionModel;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
 @EqualsAndHashCode(callSuper = true)
@@ -19,7 +17,7 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class PostConception extends AbstractEntity {
+public class PostResource extends AbstractEntity {
 
     private String fullName;
 
@@ -40,9 +38,7 @@ public class PostConception extends AbstractEntity {
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
-    @JsonProperty("detailId")
+    @JsonProperty("fileId")
     @ManyToOne
-    private Details details;
-
-
+    private File file;
 }

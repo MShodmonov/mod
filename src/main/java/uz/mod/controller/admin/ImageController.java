@@ -22,37 +22,39 @@ public class ImageController {
     private FileStorageService fileStorageService;
 
 
-
     @PostMapping("/")
-    public Image postImage(@RequestBody(required = true) MultipartFile multipartFile){
-       return fileStorageService.saveImageFile(multipartFile);
+    public Image postImage(@RequestBody(required = true) MultipartFile multipartFile) {
+        return fileStorageService.saveImageFile(multipartFile);
     }
+
     @GetMapping("/{id}")
-    public Image getImage(@PathVariable UUID id){
+    public Image getImage(@PathVariable UUID id) {
         return fileStorageService.getImage(id);
     }
 
     @GetMapping("/")
-    public Page<Image> getImagePage(@RequestParam int page, @RequestParam int size){
+    public Page<Image> getImagePage(@RequestParam int page, @RequestParam int size) {
         return fileStorageService.findAllImage(page, size);
     }
 
     @PutMapping("/edit/{id}")
-    public Image editImage(@PathVariable UUID id,@RequestBody(required = true) MultipartFile multipartFile){
+    public Image editImage(@PathVariable UUID id, @RequestBody(required = true) MultipartFile multipartFile) {
 
         ////////////////////////////
         Image image = fileStorageService.saveImageFile(multipartFile);
-        return fileStorageService.editImage(id,image);
+        return fileStorageService.editImage(id, image);
     }
+
     @DeleteMapping("/delete/{id}")////////////////////
-    public Result deletePostBook(@PathVariable UUID id){
+    public Result deletePostBook(@PathVariable UUID id) {
         Image pdf = fileStorageService.getImage(id);
         return new Result(fileStorageService.deleteFile(pdf.getFileName()));
     }
+
     @GetMapping("/download/{id}")
-    public ResponseEntity<Resource> downloadImageById(@PathVariable UUID id, HttpServletRequest httpServletRequest){
+    public ResponseEntity<Resource> downloadImageById(@PathVariable UUID id, HttpServletRequest httpServletRequest) {
         Image image = fileStorageService.getImage(id);
-        return fileStorageService.downloadFileToApp(image.getFileName(),httpServletRequest);
+        return fileStorageService.downloadFileToApp(image.getFileName(), httpServletRequest);
     }
 
 

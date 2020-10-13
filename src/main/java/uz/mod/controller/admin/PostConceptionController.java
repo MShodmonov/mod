@@ -23,61 +23,73 @@ public class PostConceptionController {
     private PostConceptionService postConceptionService;
 
     @PostMapping("/")
-    public PostConceptionModel postPostConception(@Valid @RequestBody PostConceptionModel postConceptionModel){
+    public PostConceptionModel postPostConception(@Valid @RequestBody PostConceptionModel postConceptionModel) {
         return postConceptionService.save(postConceptionModel);
     }
+
     @GetMapping("/{id}")
-    public PostConception getPostConception(@PathVariable UUID id){
+    public PostConception getPostConception(@PathVariable UUID id) {
         return postConceptionService.findById(id);
     }
+
     @GetMapping("/")
-    public Page<PostConception> getPostConceptionPage(@RequestParam int page, @RequestParam int size){
+    public Page<PostConception> getPostConceptionPage(@RequestParam int page, @RequestParam int size) {
         return postConceptionService.findAll(page, size);
     }
+
     @GetMapping("/accepted")
-    public Page<PostConception> getAcceptedPostConceptionPage(@RequestParam int page, @RequestParam int size){
+    public Page<PostConception> getAcceptedPostConceptionPage(@RequestParam int page, @RequestParam int size) {
         return postConceptionService.getAcceptedPosts(page, size);
     }
+
     @GetMapping("/favourite")
-    public List<PostConception> getFavouritePostConceptionPage(){
+    public List<PostConception> getFavouritePostConceptionPage() {
         return postConceptionService.getFavourite();
     }
+
     @GetMapping("/favourite/{id}")
-    public Result makeFavourite(@PathVariable UUID id){
+    public Result makeFavourite(@PathVariable UUID id) {
         return new Result(postConceptionService.setEnable(id));
     }
+
     @GetMapping("/unfavourite/{id}")
-    public Result makeUnFavourite(@PathVariable UUID id){
+    public Result makeUnFavourite(@PathVariable UUID id) {
         return new Result(postConceptionService.setUnFavourite(id));
     }
+
     @PutMapping("/edit/{id}")
-    public PostConceptionModel editPostConception(@PathVariable UUID id,@RequestBody PostConceptionModel postConceptionModel){
+    public PostConceptionModel editPostConception(@PathVariable UUID id, @RequestBody PostConceptionModel postConceptionModel) {
         return postConceptionService.edit(id, postConceptionModel);
     }
+
     @DeleteMapping("/delete/{id}")////////////////////
-    public Result deletePostBook(@PathVariable UUID id){
+    public Result deletePostBook(@PathVariable UUID id) {
         return new Result(postConceptionService.delete(id));
     }
 
     @GetMapping("/enable/{id}")
-    public Result editEnablePost(@PathVariable UUID id){
+    public Result editEnablePost(@PathVariable UUID id) {
         return new Result(postConceptionService.setEnable(id));
     }
 
     @GetMapping("/new")
-    public Page<PostConception> getNewPosts(@RequestParam int page, @RequestParam int size){
-        return postConceptionService.getNewPosts(page,size);
+    public Page<PostConception> getNewPosts(@RequestParam int page, @RequestParam int size) {
+        return postConceptionService.getNewPosts(page, size);
     }
+
     @GetMapping("/count")
-    public Long getNewPosts(){
+    public Long getNewPosts() {
         return postConceptionService.getPostCount();
     }
-    @GetMapping("/count/category")
-    public List<PostCount> getPostCountByCategory(){
-        return postConceptionService.countByCategory();
-    }
+
+
     @GetMapping("/accept/all")
-    public Result acceptAllNewPost(){
+    public Result acceptAllNewPost() {
         return new Result(postConceptionService.makeEnableAll());
+    }
+
+    @GetMapping("/category/{id}")
+    public List<PostCount> getFavouritePostConceptionPage(@PathVariable UUID id) {
+        return postConceptionService.getPostCountByCategory();
     }
 }

@@ -23,11 +23,7 @@ public class PostBookModel {
 
     private String schoolName;
 
-    private Boolean isEnabled;
-
     private String description;
-
-    private Boolean isFavourite;
 
     private UUID bookId;
 
@@ -37,9 +33,7 @@ public class PostBookModel {
         this.districtId = postBook.getDistrict().getId();
         this.regionId = postBook.getRegion().getId();
         this.schoolName = postBook.getSchoolName();
-        this.isEnabled = postBook.getIsEnabled();
         this.description = postBook.getDescription();
-        this.isFavourite = postBook.getIsFavourite();
         this.bookId = postBook.getBook().getId();
     }
 }

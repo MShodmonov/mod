@@ -33,7 +33,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthService authService;
 
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -61,8 +60,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
 
-
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -83,12 +80,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-ui.htm/**").permitAll()
                 .antMatchers("/api/admin/image/download/*").permitAll()
                 .antMatchers("/api/admin/pdf/download/*").permitAll()
+                .antMatchers("/api/admin/file/download/*").permitAll()
                 .antMatchers("/api/admin/**").hasRole("ADMIN")
                 .antMatchers("/**").permitAll()
 
                 .anyRequest().authenticated();
-
-
 
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -97,7 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().mvcMatchers("/assets/**","/webjars/**");
+        web.ignoring().mvcMatchers("/assets/**", "/webjars/**");
     }
 
 }

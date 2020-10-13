@@ -35,7 +35,7 @@ public class AuthController {
     private UserRepo userRepo;
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody UserSignInRequest signInRequest){
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody UserSignInRequest signInRequest) {
         if (!authService.isAuthenticate()) {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(signInRequest.getUsername(), signInRequest.getPassword()));
@@ -43,11 +43,12 @@ public class AuthController {
             String jwt = tokenProvider.generateToken(authentication);
             return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
         }
-         return ResponseEntity.badRequest().build();
+        return ResponseEntity.badRequest().build();
     }
+
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserSignInRequest signUpRequest, BindingResult bindingResult){
-        if (!authService.isAuthenticate()){
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserSignInRequest signUpRequest, BindingResult bindingResult) {
+        if (!authService.isAuthenticate()) {
             if (!bindingResult.hasErrors()) {
                 if (userRepo.existsByUsername(signUpRequest.getUsername()))
                     return ResponseEntity.badRequest().build();

@@ -38,12 +38,11 @@ public class PostBook extends AbstractEntity {
     private Boolean isFavourite;
 
 
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
     @JsonProperty("bookId")
     @ManyToOne(optional = false)
     private Book book;
-
 
 
 }

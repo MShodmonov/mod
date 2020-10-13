@@ -31,7 +31,6 @@ public class User extends AbstractEntity implements UserDetails {
     private List<Role> roles;
 
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles;

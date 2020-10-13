@@ -1,6 +1,6 @@
 package uz.mod.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import uz.mod.entity.abstractEntityLayer.AbstractEntity;
 
 import javax.persistence.Entity;
-
 import javax.persistence.OneToMany;
 import java.util.List;
 
@@ -19,21 +18,15 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Category extends AbstractEntity {
+public class File extends AbstractEntity {
 
-    private String nameUz;
-    private String nameRu;
+    private String fileName;
 
+    private Long fileSize;
 
-    public Category(String nameUz, String nameRu) {
-        this.nameRu = nameRu;
-        this.nameUz = nameUz;
-    }
+    private String fileType;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "categories")
-    private List<Subject> subjects;
-
+    private String downloadUrl;
 
 
 }

@@ -28,54 +28,42 @@ public class ConceptionService {
     @Autowired
     private SubjectRepo subjectRepo;
 
-    public Conception save(Conception conception){
+    public Conception save(Conception conception) {
         try {
             return conceptionRepo.save(conception);
-        }catch (Exception e){
-            throw new PersistenceException("persistence failed",e.getCause());
+        } catch (Exception e) {
+            throw new PersistenceException("persistence failed", e.getCause());
         }
     }
-    public Conception edit(UUID id, Conception conception){
-        Conception conceptionByRepo  = conceptionRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("This conception does not exist"));
+
+    public Conception edit(UUID id, Conception conception) {
+        Conception conceptionByRepo = conceptionRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("This conception does not exist"));
         conceptionByRepo.setConceptName(conception.getConceptName());
         conceptionByRepo.setConceptionNameRu(conception.getConceptionNameRu());
-        conceptionByRepo.setDescription(conception.getDescription());
+
 
         return conceptionRepo.save(conceptionByRepo);
     }
 
-    public Page<Conception> findAll(int page, int size){
+    public Page<Conception> findAll(int page, int size) {
         PageRequest of = PageRequest.of(page, size);
         return conceptionRepo.findAll(of);
     }
 
-    public Conception findById(UUID id){
+    public Conception findById(UUID id) {
         return conceptionRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("This conception does not exist"));
     }
 
     @Transactional
-    public Boolean delete(UUID uuid){
+    public Boolean delete(UUID uuid) {
         try {
             Conception conception = conceptionRepo.findById(uuid).orElseThrow(() -> new ResourceNotFoundException("This conception does not exist"));
-            List<Subject> allByConceptionList = subjectRepo.getAllByConceptionList(conception);
-            for (Subject subject : allByConceptionList){
-                subject.getConceptionList().remove(conception);
-                subjectRepo.save(subject);
-            }
             conceptionRepo.deleteById(uuid);
             return true;
-        }catch (Exception e) {
-            throw new ResourceNotFoundException("This conception does not exist",e.getCause());
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("This conception does not exist", e.getCause());
         }
     }
-    public List<Conception> getConceptionBySubject(UUID id){
-        Subject subject = subjectRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("This subject does not exist"));
-        return conceptionRepo.getAllBySubject(subject);
-    }
 
-
-    public List<Conception> getConceptionByCategoryId(UUID id){
-        return conceptionRepo.getAllByCategory_Id(id);
-    }
 
 }

@@ -8,12 +8,10 @@ import org.springframework.stereotype.Service;
 import uz.mod.entity.Book;
 import uz.mod.entity.Image;
 import uz.mod.entity.Pdf;
-import uz.mod.entity.Subject;
 import uz.mod.exceptions.PersistenceException;
 import uz.mod.exceptions.ResourceNotFoundException;
-import uz.mod.repository.BookRepo;
-import uz.mod.repository.ImageRepo;
-import uz.mod.repository.PdfRepo;
+import uz.mod.payload.DashboardInfo;
+import uz.mod.repository.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +28,15 @@ public class BookService {
 
     @Autowired
     private ImageRepo imageRepo;
+
+    @Autowired
+    private EmailRepo emailRepo;
+
+    @Autowired
+    private PostBookRepo postBookRepo;
+
+    @Autowired
+    private PostConceptionRepo postConceptionRepo;
 
 
     public Book save(Book book) {
@@ -60,10 +67,10 @@ public class BookService {
 
             }
         if (optionalPdf.isPresent())
-        if (!optionalPdf.get().getId().equals(book.getPdf().getId())) {
-            pdfRepo.delete(optionalPdf.get());
+            if (!optionalPdf.get().getId().equals(book.getPdf().getId())) {
+                pdfRepo.delete(optionalPdf.get());
 
-        }
+            }
 
         return save;
     }
@@ -86,21 +93,22 @@ public class BookService {
         }
     }
 
-    public Book getFavouriteSubject(){
+    public Book getFavouriteBook() {
         try {
             return bookRepo.findAllByIsFavouriteTrueOrderByCreatedAtDesc().get(0);
-        }catch (NullPointerException e){
+        } catch (Exception e) {
             throw new ResourceNotFoundException("There is not any favourite Book");
         }
     }
-    public Boolean makeBookFavourite(UUID uuid){
+
+    public Boolean makeBookFavourite(UUID uuid) {
         List<Book> bookList = bookRepo.findAllByIsFavouriteTrueOrderByCreatedAtDesc();
         if (bookList.isEmpty()) {
             Book book = findById(uuid);
             book.setIsFavourite(true);
             bookRepo.save(book);
-        }else {
-            for (Book book: bookList){
+        } else {
+            for (Book book : bookList) {
                 book.setIsFavourite(false);
                 bookRepo.save(book);
             }
@@ -110,10 +118,21 @@ public class BookService {
         }
         return true;
     }
-    public Boolean unmakeBookFavourite(UUID uuid){
+
+    public Boolean unmakeBookFavourite(UUID uuid) {
         Book book = findById(uuid);
         book.setIsFavourite(false);
         bookRepo.save(book);
         return true;
+    }
+
+    public DashboardInfo getDashboardItems() {
+        long countEmail = emailRepo.count();
+        Book favouriteBook = getFavouriteBook();
+        long postBookCount = postBookRepo.count();
+        long countPostConception = postConceptionRepo.count();
+        long countBook = bookRepo.count();
+        return new DashboardInfo(countEmail, countBook, postBookCount, countPostConception, favouriteBook.getNameUz());
+
     }
 }

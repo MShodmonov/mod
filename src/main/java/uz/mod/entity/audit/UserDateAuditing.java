@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Data
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
-public abstract class UserDateAuditing extends DateAuditing{
+public abstract class UserDateAuditing extends DateAuditing {
 
     @JsonIgnore
     @CreatedBy

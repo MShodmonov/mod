@@ -18,24 +18,27 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping("/")
-    public Category postCategory(@Valid @RequestBody Category category){
+    public Category postCategory(@Valid @RequestBody Category category) {
         return categoryService.save(category);
     }
+
     @GetMapping("/")
-    public Page<Category> getCategoryPage(@RequestParam int page, @RequestParam int size){
+    public Page<Category> getCategoryPage(@RequestParam int page, @RequestParam int size) {
         return categoryService.findAll(page, size);
     }
+
     @GetMapping("/{id}")
-    public Category getCategory(@PathVariable UUID id){
+    public Category getCategory(@PathVariable UUID id) {
         return categoryService.findById(id);
     }
 
     @PutMapping("/edit/{id}")
-    public Category editCategory(@PathVariable UUID id,@RequestBody Category category){
+    public Category editCategory(@PathVariable UUID id, @RequestBody Category category) {
         return categoryService.edit(id, category);
     }
+
     @DeleteMapping("/delete/{id}")////////////////////
-    public Result deleteCategory(@PathVariable UUID id){
+    public Result deleteCategory(@PathVariable UUID id) {
         return new Result(categoryService.delete(id));
     }
 }

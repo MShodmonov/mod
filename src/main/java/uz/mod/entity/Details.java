@@ -1,17 +1,16 @@
 package uz.mod.entity;
 
-
 import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import uz.mod.entity.abstractEntityLayer.AbstractEntity;
-import uz.mod.payload.PostConceptionModel;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -19,30 +18,18 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class PostConception extends AbstractEntity {
+public class Details extends AbstractEntity {
 
-    private String fullName;
+    private String title;
 
-    @ManyToOne
-    private District district;
 
-    @ManyToOne
-    private Region region;
-
-    private String schoolName;
-
-    private Boolean isEnabled;
-
+    @Column(columnDefinition = "TEXT")
     private String description;
-
-    private Boolean isFavourite;
-
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
-    @JsonProperty("detailId")
-    @ManyToOne
-    private Details details;
-
+    @JsonProperty("connectorId")
+    @OneToOne(mappedBy = "details")
+    private Connector connector;
 
 }

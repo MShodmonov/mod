@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import uz.mod.entity.Book;
+import uz.mod.payload.DashboardInfo;
 import uz.mod.payload.Result;
 import uz.mod.service.BookService;
 
@@ -19,37 +20,48 @@ public class BookController {
     private BookService bookService;
 
     @PostMapping("/book/")
-    public Book postBook(@Valid @RequestBody Book book){
+    public Book postBook(@Valid @RequestBody Book book) {
         return bookService.save(book);
     }
+
     @GetMapping("/book/{id}")
-    public Book getBook(@PathVariable UUID id){
+    public Book getBook(@PathVariable UUID id) {
         return bookService.findById(id);
     }
+
     @GetMapping("/book/")
-    public Page<Book> getBookPage(@RequestParam int page,@RequestParam int size){
+    public Page<Book> getBookPage(@RequestParam int page, @RequestParam int size) {
         return bookService.findAll(page, size);
     }
+
     @PutMapping("/book/edit/{id}")
-    public Book editBook(@PathVariable UUID id,@RequestBody Book book){
+    public Book editBook(@PathVariable UUID id, @RequestBody Book book) {
         return bookService.edit(id, book);
     }
+
     @DeleteMapping("/book/delete/{id}")////////////////////
-    public Result deleteBook(@PathVariable UUID id){
+    public Result deleteBook(@PathVariable UUID id) {
         return new Result(bookService.delete(id));
     }
 
-    @GetMapping("/favourite")
-    private Book getFavouriteBook(){
-        return bookService.getFavouriteSubject();
+    @GetMapping("/book/favourite")
+    private Book getFavouriteBook() {
+        return bookService.getFavouriteBook();
     }
-    @GetMapping("/favourite/{id}")
-    private Result makeFavouriteBook(@PathVariable UUID id){
-        return new Result( bookService.makeBookFavourite(id));
+
+    @GetMapping("/book/favourite/{id}")
+    private Result makeFavouriteBook(@PathVariable UUID id) {
+        return new Result(bookService.makeBookFavourite(id));
     }
-    @GetMapping("/unfavourite/{id}")
-    private Result unsetFavouriteSubject(@PathVariable UUID id){
-        return new Result( bookService.unmakeBookFavourite(id));
+
+    @GetMapping("/book/unfavourite/{id}")
+    private Result unsetFavouriteSubject(@PathVariable UUID id) {
+        return new Result(bookService.unmakeBookFavourite(id));
+    }
+
+    @GetMapping("/info")
+    public DashboardInfo getDashboardInfo() {
+        return bookService.getDashboardItems();
     }
 
 

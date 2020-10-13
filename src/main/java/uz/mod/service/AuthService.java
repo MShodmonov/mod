@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import uz.mod.entity.Role;
 import uz.mod.entity.User;
 import uz.mod.entity.enums.RoleEnumeration;
+import uz.mod.payload.DashboardInfo;
 import uz.mod.payload.UserSignInRequest;
 import uz.mod.repository.RoleRepo;
 import uz.mod.repository.UserRepo;
@@ -35,9 +36,8 @@ public class AuthService implements UserDetailsService {
     private UserRepo userRepo;
 
 
-
     @Autowired
-     PasswordEncoder passwordEncoder;
+    PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -50,12 +50,12 @@ public class AuthService implements UserDetailsService {
                 instanceof AnonymousAuthenticationToken);
     }
 
-    public User saveUser(UserSignInRequest signUpRequest)
-    {
-        List<Role> list=new LinkedList<>();
+    public User saveUser(UserSignInRequest signUpRequest) {
+        List<Role> list = new LinkedList<>();
         list.add(roleRepo.findRoleByName(RoleEnumeration.ROLE_USER).get());
-        return userRepo.save(new User(signUpRequest.getUsername(),passwordEncoder.encode(signUpRequest.getPassword()),list));
+        return userRepo.save(new User(signUpRequest.getUsername(), passwordEncoder.encode(signUpRequest.getPassword()), list));
     }
+
     public Authentication setSecurity(User user) {
         SecurityContext context = new MySecurityContext();
         MyAuthentication authentication = new MyAuthentication(user.getAuthorities());
@@ -67,7 +67,7 @@ public class AuthService implements UserDetailsService {
     }
 
     public UserDetails loadUserById(String userId) {
-        return  userRepo.findById(UUID.fromString(userId)).orElseThrow(() -> new UsernameNotFoundException("User not found user id: " + userId));
+        return userRepo.findById(UUID.fromString(userId)).orElseThrow(() -> new UsernameNotFoundException("User not found user id: " + userId));
 
     }
 

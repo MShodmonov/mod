@@ -1,7 +1,6 @@
 package uz.mod.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,7 +16,6 @@ import static javax.persistence.CascadeType.ALL;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -29,15 +27,14 @@ public class Subject extends AbstractEntity {
 
     private String subjectNameRu;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "subject")
-    private List<Conception> conceptionList = new LinkedList<>();
 
-
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
+    @JsonProperty("categoriesId")
     @ManyToOne(fetch = FetchType.EAGER)
     private Category categories;
 
-    public Subject(String subjectName,String subjectNameRu, Category categories ) {
+    public Subject(String subjectName, String subjectNameRu, Category categories) {
         this.subjectName = subjectName;
         this.subjectNameRu = subjectNameRu;
         this.categories = categories;

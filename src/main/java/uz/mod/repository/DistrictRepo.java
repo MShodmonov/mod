@@ -9,5 +9,5 @@ import java.util.UUID;
 
 public interface DistrictRepo extends JpaRepository<District, UUID> {
 
-    List<District>getAllByRegion(Region region);
+    List<District> getAllByRegion(Region region);
 }

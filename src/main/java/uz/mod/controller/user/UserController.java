@@ -76,7 +76,7 @@ public class UserController {
 
     @GetMapping("/count/post")
     public List<PostCount> getPostsCount() {
-        return postConceptionService.countByCategory();
+        return null;
     }
 
     @GetMapping("/download/pdf/{id}")
@@ -117,8 +117,9 @@ public class UserController {
     public Page<Book> getBookPage(@RequestParam int page, @RequestParam int size) {
         return bookService.findAll(page, size);
     }
+
     @GetMapping("/{id}")
-    public Subject getSubject(@PathVariable UUID id){
+    public Subject getSubject(@PathVariable UUID id) {
         return subjectService.findById(id);
     }
 
@@ -126,16 +127,6 @@ public class UserController {
     List<Subject> getSubjectByCategory(@PathVariable UUID id) {
         Category category = categoryService.findById(id);
         return subjectService.getSubjectsByCategory(category);
-    }
-
-    @GetMapping("/conception/subject/{id}")
-    List<Conception> getConceptionBySubject(@PathVariable(name = "id") UUID uuid) {
-        return conceptionService.getConceptionBySubject(uuid);
-    }
-
-    @GetMapping("/conception/category/{id}")
-    private List<Conception> getConceptionByCategoryId(@PathVariable UUID id){
-        return conceptionService.getConceptionByCategoryId(id);
     }
 
     @PostMapping("/conception/post")
@@ -172,41 +163,40 @@ public class UserController {
     }
 
     @GetMapping("/category")
-    public Page<Category> getCategoryPage(@RequestParam int page, @RequestParam int size){
+    public Page<Category> getCategoryPage(@RequestParam int page, @RequestParam int size) {
         return categoryService.findAll(page, size);
     }
+
     @GetMapping("/category/{id}")
-    public Category getCategory(@PathVariable UUID id){
+    public Category getCategory(@PathVariable UUID id) {
         return categoryService.findById(id);
     }
 
     @GetMapping("/subject/list")
-    private List<Subject> getSubjectList(){
+    private List<Subject> getSubjectList() {
         return subjectService.getAllSubject();
     }
 
     @PostMapping("/email")
-    public Email postEmail(@Valid @RequestBody Email email){
+    public Email postEmail(@Valid @RequestBody Email email) {
         return emailService.save(email);
     }
 
 
-    ///main page dagi book uchun keyin ichidan imagine ni olasiz
-
     @GetMapping("/favourite")
-    private Book getFavouriteBook(){
-        return bookService.getFavouriteSubject();
+    private Book getFavouriteBook() {
+        return bookService.getFavouriteBook();
     }
 
-    //Shahobbek bu mening api url im sizga kerak emas//
     @GetMapping("/email/unsubscribe/{id}")
-    public Result sentEmailAboutBook(@PathVariable UUID id){
+    public Result sentEmailAboutBook(@PathVariable UUID id) {
         return new Result(emailService.delete(id));
     }
 
-
-
-
+    @GetMapping("/post/detail/category/{id}")
+    public List<PostCount> getFavouritePostConceptionPage(@PathVariable UUID id) {
+        return postConceptionService.getPostCountByCategory();
+    }
 
 
 }

@@ -21,29 +21,32 @@ public class EmailController {
     private EmailService emailService;
 
     @PostMapping("/")
-    public Email postEmail(@Valid @RequestBody Email email){
+    public Email postEmail(@Valid @RequestBody Email email) {
         return emailService.save(email);
     }
+
     @GetMapping("/")
-    public Page<Email> getEmailPage(@RequestParam int page, @RequestParam int size){
+    public Page<Email> getEmailPage(@RequestParam int page, @RequestParam int size) {
         return emailService.findAll(page, size);
     }
+
     @GetMapping("/{id}")
-    public Email getEmail(@PathVariable UUID id){
+    public Email getEmail(@PathVariable UUID id) {
         return emailService.findById(id);
     }
 
     @GetMapping("/book/{id}")
-    public Result sentEmailAboutBook(@PathVariable UUID id){
+    public Result sentEmailAboutBook(@PathVariable UUID id) {
         return new Result(emailService.sentEmailAboutBook(id));
     }
+
     @PutMapping("/edit/{id}")
-    public Email editEmail(@PathVariable UUID id,@RequestBody Email email){
+    public Email editEmail(@PathVariable UUID id, @RequestBody Email email) {
         return emailService.edit(id, email);
     }
+
     @DeleteMapping("/delete/{id}")////////////////////
-    public Result deleteEmail(@PathVariable UUID id)
-    {
+    public Result deleteEmail(@PathVariable UUID id) {
         return new Result(emailService.delete(id));
     }
 

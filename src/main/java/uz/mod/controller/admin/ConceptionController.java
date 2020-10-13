@@ -23,36 +23,31 @@ public class ConceptionController {
     private ConceptionService conceptionService;
 
     @PostMapping("/")
-    public Conception postConception(@Valid @RequestBody Conception conception){
+    public Conception postConception(@Valid @RequestBody Conception conception) {
         return conceptionService.save(conception);
     }
+
     @GetMapping("/")
-    public Page<Conception> getConceptionPage(@RequestParam int page, @RequestParam int size){
+    public Page<Conception> getConceptionPage(@RequestParam int page, @RequestParam int size) {
         return conceptionService.findAll(page, size);
     }
+
     @GetMapping("/{id}")
-    public Conception getConception(@PathVariable UUID id){
+    public Conception getConception(@PathVariable UUID id) {
         return conceptionService.findById(id);
     }
 
     @PutMapping("/edit/{id}")
-    public Conception editConception(@PathVariable UUID id,@RequestBody Conception conception){
+    public Conception editConception(@PathVariable UUID id, @RequestBody Conception conception) {
         return conceptionService.edit(id, conception);
     }
+
     @DeleteMapping("/delete/{id}")////////////////////
-    public Result deleteConception(@PathVariable UUID id)
-    {
+    public Result deleteConception(@PathVariable UUID id) {
         return new Result(conceptionService.delete(id));
     }
 
-    @GetMapping("/category/{id}")
-    private List<Conception> getConceptionByCategoryId(@PathVariable UUID id){
-        return conceptionService.getConceptionByCategoryId(id);
-    }
-    @GetMapping("/subject/{id}")
-    private List<Conception> getConceptionBySubjectId(@PathVariable UUID id){
-        return conceptionService.getConceptionBySubject(id);
-    }
+
 
 
 }

@@ -13,6 +13,8 @@ public interface SubjectRepo extends JpaRepository<Subject, UUID> {
 
     List<Subject> getAllByCategories(Category category);
 
-    List<Subject>getAllByConceptionList(Conception conception);
+
+
+
 
 }

@@ -10,7 +10,6 @@ import java.util.UUID;
 
 public interface ConceptionRepo extends JpaRepository<Conception, UUID> {
 
-    List<Conception> getAllBySubject(Subject subject);
 
-    List<Conception> getAllByCategory_Id(UUID categoryId);
+
 }

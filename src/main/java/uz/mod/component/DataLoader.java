@@ -85,18 +85,18 @@
 //        Subject subject10 = subjectRepo.save(new Subject("Spain 10 th grade","Spain 10 th grade",category1));
 //
 //
-//        Conception conception = conceptionRepo.save(new Conception("1. conception","1. conception","1. conception",category1,subject1));
-//        Conception conception1 = conceptionRepo.save(new Conception("2. conception","2. conception","2. conception",category2,subject2));
-//        Conception conception2 = conceptionRepo.save(new Conception("3. conception","3. conception","3. conception",category3,subject3));
-//        Conception conception3 = conceptionRepo.save(new Conception("4. conception","4. conception","4. conception",category1,subject4));
-//        Conception conception4 = conceptionRepo.save(new Conception("1. conception","1. conception","1. conception",category2,subject2));
-//        Conception conception5 = conceptionRepo.save(new Conception("2. conception","2. conception","2. conception",category3,subject1));
-//        Conception conception6 = conceptionRepo.save(new Conception("3. conception","3. conception","3. conception",category1,subject10));
-//        Conception conception7 = conceptionRepo.save(new Conception("4. conception","4. conception","4. conception",category1,subject7));
-//        Conception conception8 = conceptionRepo.save(new Conception("1. conception","1. conception","1. conception",category3,subject3));
-//        Conception conception9 = conceptionRepo.save(new Conception("2. conception","2. conception","2. conception",category3,subject3));
-//        Conception conception10 = conceptionRepo.save(new Conception("3. conception","3. conception","3. conception",category3,subject3));
-//        Conception conception11 = conceptionRepo.save(new Conception("4. conception","4. conception","4. conception",category3,subject3));
+//        Conception conception = conceptionRepo.save(new Conception("1. conception","1. conception"));
+//        Conception conception1 = conceptionRepo.save(new Conception("2. conception","2. conception"));
+//        Conception conception2 = conceptionRepo.save(new Conception("3. conception","3. conception"));
+//        Conception conception3 = conceptionRepo.save(new Conception("4. conception","4. conception"));
+//        Conception conception4 = conceptionRepo.save(new Conception("1. conception","1. conception"));
+//        Conception conception5 = conceptionRepo.save(new Conception("2. conception","2. conception"));
+//        Conception conception6 = conceptionRepo.save(new Conception("3. conception","3. conception"));
+//        Conception conception7 = conceptionRepo.save(new Conception("4. conception","4. conception"));
+//        Conception conception8 = conceptionRepo.save(new Conception("1. conception","1. conception"));
+//        Conception conception9 = conceptionRepo.save(new Conception("2. conception","2. conception"));
+//        Conception conception10 = conceptionRepo.save(new Conception("3. conception","3. conception"));
+//        Conception conception11 = conceptionRepo.save(new Conception("4. conception","4. conception"));
 //        List<Conception>list = new LinkedList<>();
 //        list.add(conception);
 //        list.add(conception1);

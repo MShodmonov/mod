@@ -30,6 +30,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
                 .build()
                 .apiInfo(metaData());
     }
+
     private ApiInfo metaData() {
         List<VendorExtension> vendorExtensions = new ArrayList<>();
         ApiInfo apiInfo = new ApiInfoBuilder().title("Lms api").description("Spring Boot REST API for Online Store")
@@ -39,6 +40,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
 
 
     }
+
     @Override
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("swagger-ui.html")

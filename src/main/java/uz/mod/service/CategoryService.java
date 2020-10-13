@@ -19,35 +19,36 @@ public class CategoryService {
     @Autowired
     private CategoryRepo categoryRepo;
 
-    public Category save(Category category){
+    public Category save(Category category) {
         try {
             return categoryRepo.save(category);
-        }catch (Exception e){
-            throw new PersistenceException("persistence failed",e.getCause());
+        } catch (Exception e) {
+            throw new PersistenceException("persistence failed", e.getCause());
         }
     }
-    public Category edit(UUID id, Category category){
-        Category categoryByRepo  = categoryRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("This category does not exist"));
+
+    public Category edit(UUID id, Category category) {
+        Category categoryByRepo = categoryRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("This category does not exist"));
         categoryByRepo.setNameRu(category.getNameRu());
         categoryByRepo.setNameUz(category.getNameUz());
         return categoryRepo.save(categoryByRepo);
     }
 
-    public Page<Category> findAll(int page, int size){
+    public Page<Category> findAll(int page, int size) {
         PageRequest of = PageRequest.of(page, size);
         return categoryRepo.findAll(of);
     }
 
-    public Category findById(UUID id){
+    public Category findById(UUID id) {
         return categoryRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("This category does not exist"));
     }
 
-    public Boolean delete(UUID uuid){
+    public Boolean delete(UUID uuid) {
         try {
             categoryRepo.deleteById(uuid);
             return true;
-        }catch (Exception e) {
-            throw new ResourceNotFoundException("This conception does not exist",e.getCause());
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("This conception does not exist", e.getCause());
         }
 
     }

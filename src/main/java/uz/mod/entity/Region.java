@@ -33,5 +33,4 @@ public class Region extends AbstractEntity {
     private List<District> district;
 
 
-
 }
