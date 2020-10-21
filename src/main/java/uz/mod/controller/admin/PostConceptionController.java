@@ -49,7 +49,7 @@ public class PostConceptionController {
 
     @GetMapping("/favourite/{id}")
     public Result makeFavourite(@PathVariable UUID id) {
-        return new Result(postConceptionService.setEnable(id));
+        return new Result(postConceptionService.setFavourite(id));
     }
 
     @GetMapping("/unfavourite/{id}")
@@ -92,4 +92,10 @@ public class PostConceptionController {
     public List<PostCount> getFavouritePostConceptionPage(@PathVariable UUID id) {
         return postConceptionService.getPostCountByCategory();
     }
+
+    @GetMapping("/details/{id}")
+    public List<PostConception> getPostConceptionByDetailsId(@PathVariable UUID id) {
+        return postConceptionService.getPostConceptionByDetailsId(id);
+    }
+
 }

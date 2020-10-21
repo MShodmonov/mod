@@ -84,8 +84,8 @@ public class PostBookController {
     }
 
     @GetMapping("/list/book/{id}")
-    public List<PostBook> getPostByBookId(@PathVariable UUID id) {
-        return postBookService.getPostBookByBookId(id);
+    public Page<PostBook> getPostByBookId(@PathVariable UUID id,@RequestParam int page, @RequestParam int size) {
+        return postBookService.getPostBookByBookId(id,page,size);
     }
 
 }

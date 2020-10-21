@@ -17,7 +17,7 @@ public class DashboardInfo {
 
     private Long postConceptionCount;
 
-    private String bookName;
+    private Long favouriteBookCount;
 
 
 }

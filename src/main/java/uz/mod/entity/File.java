@@ -20,7 +20,11 @@ import java.util.List;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class File extends AbstractEntity {
 
+    private Boolean isFavourite;
+
     private String fileName;
+
+    private String givenName;
 
     private Long fileSize;
 

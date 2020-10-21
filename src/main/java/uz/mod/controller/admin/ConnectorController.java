@@ -4,11 +4,9 @@ package uz.mod.controller.admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-import uz.mod.entity.Conception;
 import uz.mod.entity.Connector;
 import uz.mod.payload.ConnectorPayload;
 import uz.mod.payload.Result;
-import uz.mod.service.ConceptionService;
 import uz.mod.service.ConnectorService;
 
 import javax.validation.Valid;
@@ -45,6 +43,16 @@ public class ConnectorController {
     @DeleteMapping("/delete/{id}")////////////////////
     public Result deleteConnector(@PathVariable UUID id) {
         return new Result(connectorService.delete(id));
+    }
+
+    @GetMapping("/subject/{subjectId}/conception/{conceptionId}")
+    public List<Connector> getConnectorBySubjectAndConception(@PathVariable UUID subjectId, @PathVariable UUID conceptionId) {
+        return connectorService.findAllConnectorByConceptionAndSubject(conceptionId, subjectId);
+    }
+
+    @DeleteMapping("/subject/{subjectId}")
+    public Result deleteSubject(@PathVariable UUID subjectId) {
+        return connectorService.deleteSubject(subjectId);
     }
 
 }

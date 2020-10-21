@@ -4,11 +4,8 @@ package uz.mod.controller.admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-import uz.mod.entity.Connector;
 import uz.mod.entity.Details;
 import uz.mod.payload.Result;
-import uz.mod.repository.DetailRepo;
-import uz.mod.service.ConnectorService;
 import uz.mod.service.DetailService;
 
 import javax.validation.Valid;
@@ -41,7 +38,7 @@ public class DetailsController {
         return detailService.edit(id, details);
     }
 
-    @DeleteMapping("/delete/{id}")////////////////////
+    @DeleteMapping("/delete/{id}")
     public Result deleteDetails(@PathVariable UUID id) {
         return new Result(detailService.delete(id));
     }

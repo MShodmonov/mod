@@ -9,4 +9,7 @@ import java.util.UUID;
 public interface BookRepo extends JpaRepository<Book, UUID> {
 
     List<Book> findAllByIsFavouriteTrueOrderByCreatedAtDesc();
+
+    Long countByIsFavouriteTrueOrderByCreatedAtDesc();
+
 }

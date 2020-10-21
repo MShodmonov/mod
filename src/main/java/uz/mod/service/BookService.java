@@ -5,9 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uz.mod.entity.Book;
 import uz.mod.entity.Image;
 import uz.mod.entity.Pdf;
+import uz.mod.entity.PostBook;
 import uz.mod.exceptions.PersistenceException;
 import uz.mod.exceptions.ResourceNotFoundException;
 import uz.mod.payload.DashboardInfo;
@@ -16,6 +18,8 @@ import uz.mod.repository.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import static javax.swing.UIManager.get;
 
 @Service
 public class BookService {
@@ -41,6 +45,7 @@ public class BookService {
 
     public Book save(Book book) {
         try {
+            book.setIsFavourite(false);
             return bookRepo.save(book);
         } catch (Exception e) {
             throw new PersistenceException("persistence failed", e.getCause());
@@ -86,6 +91,11 @@ public class BookService {
 
     public Boolean delete(UUID uuid) {
         try {
+            Book book = findById(uuid);
+            List<PostBook> postBookList = postBookRepo.findAllByBookOrderByCreatedAtDesc(book);
+            for (PostBook postBook : postBookList) {
+                postBookRepo.delete(postBook);
+            }
             bookRepo.deleteById(uuid);
             return true;
         } catch (Exception e) {
@@ -93,46 +103,36 @@ public class BookService {
         }
     }
 
-    public Book getFavouriteBook() {
+    public List<Book> getFavouriteBook() {
         try {
-            return bookRepo.findAllByIsFavouriteTrueOrderByCreatedAtDesc().get(0);
+            List<Book> books = bookRepo.findAllByIsFavouriteTrueOrderByCreatedAtDesc();
+                return books;
         } catch (Exception e) {
-            throw new ResourceNotFoundException("There is not any favourite Book");
+            throw new PersistenceException("There is not any favourite Book");
         }
     }
 
     public Boolean makeBookFavourite(UUID uuid) {
-        List<Book> bookList = bookRepo.findAllByIsFavouriteTrueOrderByCreatedAtDesc();
-        if (bookList.isEmpty()) {
             Book book = findById(uuid);
-            book.setIsFavourite(true);
+            book.setIsFavourite(!book.getIsFavourite());
             bookRepo.save(book);
-        } else {
-            for (Book book : bookList) {
-                book.setIsFavourite(false);
-                bookRepo.save(book);
-            }
-            Book book = findById(uuid);
-            book.setIsFavourite(true);
-            bookRepo.save(book);
-        }
         return true;
     }
 
-    public Boolean unmakeBookFavourite(UUID uuid) {
-        Book book = findById(uuid);
-        book.setIsFavourite(false);
-        bookRepo.save(book);
-        return true;
-    }
-
+    @Transactional
     public DashboardInfo getDashboardItems() {
         long countEmail = emailRepo.count();
-        Book favouriteBook = getFavouriteBook();
+        Long count = bookRepo.countByIsFavouriteTrueOrderByCreatedAtDesc();
         long postBookCount = postBookRepo.count();
         long countPostConception = postConceptionRepo.count();
         long countBook = bookRepo.count();
-        return new DashboardInfo(countEmail, countBook, postBookCount, countPostConception, favouriteBook.getNameUz());
+        return new DashboardInfo(countEmail, countBook, postBookCount, countPostConception, count);
 
+    }
+
+    @Transactional
+    public Page<Book> findAllTransactional(int page, int size) {
+        PageRequest of = PageRequest.of(page, size);
+        return bookRepo.findAll(of);
     }
 }

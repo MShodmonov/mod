@@ -10,6 +10,7 @@ import uz.mod.payload.Result;
 import uz.mod.service.BookService;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -45,18 +46,13 @@ public class BookController {
     }
 
     @GetMapping("/book/favourite")
-    private Book getFavouriteBook() {
+    private List<Book> getFavouriteBook() {
         return bookService.getFavouriteBook();
     }
 
     @GetMapping("/book/favourite/{id}")
     private Result makeFavouriteBook(@PathVariable UUID id) {
         return new Result(bookService.makeBookFavourite(id));
-    }
-
-    @GetMapping("/book/unfavourite/{id}")
-    private Result unsetFavouriteSubject(@PathVariable UUID id) {
-        return new Result(bookService.unmakeBookFavourite(id));
     }
 
     @GetMapping("/info")

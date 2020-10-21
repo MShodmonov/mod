@@ -28,7 +28,7 @@ public class DetailService {
         Details detailsByRepo = detailRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("This deatial does not exist"));
         detailsByRepo.setTitle(details.getTitle());
         detailsByRepo.setDescription(details.getDescription());
-        return detailRepo.save(details);
+        return detailRepo.save(detailsByRepo);
     }
 
     public Page<Details> findAll(int page, int size) {

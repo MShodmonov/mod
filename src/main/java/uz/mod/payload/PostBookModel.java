@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import uz.mod.entity.PostBook;
 import uz.mod.entity.PostConception;
 
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Data
@@ -17,12 +18,15 @@ public class PostBookModel {
 
     private String fullName;
 
+    @NotNull
     private UUID districtId;
 
+    @NotNull
     private UUID regionId;
 
     private String schoolName;
 
+    @NotNull
     private String description;
 
     private UUID bookId;

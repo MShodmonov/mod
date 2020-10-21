@@ -2,6 +2,7 @@ package uz.mod.controller.admin;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import uz.mod.payload.Result;
 import uz.mod.service.FileStorageService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @RestController
@@ -48,6 +50,7 @@ public class ImageController {
     @DeleteMapping("/delete/{id}")////////////////////
     public Result deletePostBook(@PathVariable UUID id) {
         Image pdf = fileStorageService.getImage(id);
+        fileStorageService.deleteImage(id);
         return new Result(fileStorageService.deleteFile(pdf.getFileName()));
     }
 
@@ -56,6 +59,11 @@ public class ImageController {
         Image image = fileStorageService.getImage(id);
         return fileStorageService.downloadFileToApp(image.getFileName(), httpServletRequest);
     }
-
+    @GetMapping("/download/fileName/{fileName:.+}")
+    public ResponseEntity<Resource> downloadImageByName(@PathVariable String fileName, HttpServletRequest response
+    ) {
+        Image image = fileStorageService.getImageByName(fileName);
+        return fileStorageService.downloadFileToApp(image.getFileName(), response);
+    }
 
 }

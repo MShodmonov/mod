@@ -19,12 +19,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import uz.mod.entity.Category;
 import uz.mod.entity.Image;
 import uz.mod.entity.Pdf;
+import uz.mod.entity.PostResource;
 import uz.mod.exceptions.FileStorageException;
 import uz.mod.exceptions.PersistenceException;
 import uz.mod.exceptions.ResourceNotFoundException;
 import uz.mod.repository.FileRepo;
 import uz.mod.repository.ImageRepo;
 import uz.mod.repository.PdfRepo;
+import uz.mod.repository.PostResourceRepo;
 import uz.mod.utils.FileStorageProperties;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +37,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.*;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -52,6 +55,9 @@ public class FileStorageService {
 
     @Autowired
     private FileRepo fileRepo;
+
+    @Autowired
+    private PostResourceRepo postResourceRepo;
 
     @Autowired
     public FileStorageService(FileStorageProperties fileStorageLocation) {
@@ -111,7 +117,7 @@ public class FileStorageService {
         String storeFileName = storeFile(file);
 
         String filepath = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/admin/image/download/")
+                .path("/api/admin/image/download/fileName/")
                 .path(storeFileName)
                 .toUriString();
         return imageRepo.save(new Image(storeFileName, file.getSize(), file.getContentType(), filepath));
@@ -133,12 +139,8 @@ public class FileStorageService {
 
     }
 
-    public Image saveImage(Image image) {
-        try {
-            return imageRepo.save(image);
-        } catch (Exception e) {
-            throw new PersistenceException("persistence failed", e.getCause());
-        }
+    public Image getImageByName(String fileName){
+        return  imageRepo.findByFileName(fileName).orElseThrow(() -> new ResourceNotFoundException("this image does not exist"));
     }
 
     public Image editImage(UUID id, Image image) {
@@ -172,13 +174,6 @@ public class FileStorageService {
         return pdfRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("this pdf does not exist"));
     }
 
-    public Pdf savePdf(Pdf pdf) {
-        try {
-            return pdfRepo.save(pdf);
-        } catch (Exception e) {
-            throw new PersistenceException("persistence failed", e.getCause());
-        }
-    }
 
     public Pdf editPdf(UUID id, Pdf pdf) {
         Pdf pdfByRepo = pdfRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("This pdf does not exist"));
@@ -286,6 +281,8 @@ public class FileStorageService {
             case "audio/mpeg":
             case "video/mpeg":
                 return "mpeg";
+            case "video/mp4":
+                return "mp4";
             case "image/jpeg":
                 return "jpeg";
             case "application/octet-stream":
@@ -328,7 +325,7 @@ public class FileStorageService {
                 .path("/api/admin/file/download/")
                 .path(storeFileName)
                 .toUriString();
-        return fileRepo.save(new uz.mod.entity.File(storeFileName, file.getSize(), file.getContentType(), filepath));
+        return fileRepo.save(new uz.mod.entity.File(false,storeFileName,file.getOriginalFilename(),file.getSize(), file.getContentType(), filepath));
     }
 
     public uz.mod.entity.File getFile(UUID id) {
@@ -350,6 +347,7 @@ public class FileStorageService {
         fileByRepo.setFileName(file.getFileName());
         fileByRepo.setFileSize(file.getFileSize());
         fileByRepo.setFileType(file.getFileType());
+        fileByRepo.setGivenName(file.getGivenName());
 
         return fileRepo.save(fileByRepo);
     }
@@ -360,6 +358,11 @@ public class FileStorageService {
     }
     public Boolean deleteFile(UUID uuid) {
         try {
+            uz.mod.entity.File file = getFile(uuid);
+            List<PostResource> postResourceList = postResourceRepo.findAllByFileOrderByCreatedAtDesc(file);
+            for (PostResource postResource : postResourceList){
+                postResourceRepo.delete(postResource);
+            }
             fileRepo.deleteById(uuid);
             return true;
         } catch (Exception e) {

@@ -33,15 +33,9 @@ public class Book extends AbstractEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    @JsonIdentityReference(alwaysAsId = true)
-    @JsonProperty("imageId")
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne
     private Image image;
 
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    @JsonIdentityReference(alwaysAsId = true)
-    @JsonProperty("pdfId")
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne
     private Pdf pdf;
 }

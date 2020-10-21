@@ -14,14 +14,16 @@ import java.util.UUID;
 
 public interface PostConceptionRepo extends JpaRepository<PostConception, UUID> {
 
-    List<PostConception> findAllByIsFavouriteTrue();
+    List<PostConception> findAllByIsFavouriteTrueOrderByCreatedAtDesc();
 
-    Page<PostConception> findAllByIsEnabled(Boolean isEnabled, Pageable pageable);
+    List<PostConception> findAllByIsFavouriteTrueAndDetails_IdOrderByCreatedAtDesc(UUID detailsId);
 
-    List<PostConception> findAllByIsEnabledFalse();
+    Page<PostConception> findAllByIsEnabledOrderByCreatedAtDesc(Boolean isEnabled, Pageable pageable);
 
-    @Query(value = "select count(post_conception.id) from post_conception join details d on d.id = post_conception.details_id join connector c on c.id = d.connector_id join subject s on s.id = c.subject_id join category c2 on s.categories_id = c2.id where c2.id= :category_id",nativeQuery = true)
+    List<PostConception> findAllByIsEnabledFalseOrderByCreatedAtDesc();
+
+    @Query(value = "select count(post_conception.id) from post_conception join details d on post_conception.details_id = d.id join connector c on d.id = c.details_id join subject s on c.subject_id = s.id join category c2 on s.categories_id = c2.id where c2.id=:category_id",nativeQuery = true)
     Long countByDetailsAAndCategory(@Param("category_id") UUID categoryId);
 
-    List<PostConception> findAllByDetails_Id(UUID detailsId);
+    List<PostConception> findAllByDetails_IdOrderByCreatedAtDesc(UUID detailsId);
 }

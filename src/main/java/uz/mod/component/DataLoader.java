@@ -70,9 +70,11 @@
 //        roleRepository.save(user);
 //        roleRepository.save(admin);
 //
-//        Category category1 = categoryRepo.save(new Category("Language","Language in russian"));
-//        Category category2 = categoryRepo.save(new Category("Exact subject","Exact subject in russian"));
-//        Category category3 = categoryRepo.save(new Category("Some Cat","Some Cat in russian"));
+//        Category category1 = categoryRepo.save(new Category("Cat 1","Cat 1 in russian"));
+//        Category category2 = categoryRepo.save(new Category("Cat 2","Cat 2 in russian"));
+//        Category category3 = categoryRepo.save(new Category("Cat 3","Cat 3 in russian"));
+//        Category category4 = categoryRepo.save(new Category("Cat 4","Cat 4 in russian"));
+//        Category category5 = categoryRepo.save(new Category("Cat 5","Cat 5 in russian"));
 //        Subject subject1 = subjectRepo.save(new Subject("English 10 th grade","English 10 th grade",category1));
 //        Subject subject2 = subjectRepo.save(new Subject("Algebra 10 th grade","Algebra 10 th grade",category2));
 //        Subject subject3 = subjectRepo.save(new Subject("History 10 th grade","History 10 th grade",category3));
@@ -91,17 +93,6 @@
 //        Conception conception3 = conceptionRepo.save(new Conception("4. conception","4. conception"));
 //        Conception conception4 = conceptionRepo.save(new Conception("1. conception","1. conception"));
 //        Conception conception5 = conceptionRepo.save(new Conception("2. conception","2. conception"));
-//        Conception conception6 = conceptionRepo.save(new Conception("3. conception","3. conception"));
-//        Conception conception7 = conceptionRepo.save(new Conception("4. conception","4. conception"));
-//        Conception conception8 = conceptionRepo.save(new Conception("1. conception","1. conception"));
-//        Conception conception9 = conceptionRepo.save(new Conception("2. conception","2. conception"));
-//        Conception conception10 = conceptionRepo.save(new Conception("3. conception","3. conception"));
-//        Conception conception11 = conceptionRepo.save(new Conception("4. conception","4. conception"));
-//        List<Conception>list = new LinkedList<>();
-//        list.add(conception);
-//        list.add(conception1);
-//        list.add(conception2);
-//        list.add(conception3);
 //
 //
 //
@@ -110,10 +101,7 @@
 //
 //
 //
-//
-//
-//
-//        User root = new User("root",passwordEncoder.encode("root123"),roles);
+//        User root = new User("mod123",passwordEncoder.encode("superadmin"),roles);
 //        userRepository.save(root);
 //    }
 //

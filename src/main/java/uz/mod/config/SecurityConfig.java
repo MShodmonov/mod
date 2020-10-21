@@ -79,6 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/v2/**").permitAll()
                 .antMatchers("/swagger-ui.htm/**").permitAll()
                 .antMatchers("/api/admin/image/download/*").permitAll()
+                .antMatchers("/api/admin/image/download/fileName/*").permitAll()
                 .antMatchers("/api/admin/pdf/download/*").permitAll()
                 .antMatchers("/api/admin/file/download/*").permitAll()
                 .antMatchers("/api/admin/**").hasRole("ADMIN")

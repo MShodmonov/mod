@@ -72,7 +72,7 @@ public class PostBookService {
 
     public Page<PostBook> findAllEnabled(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return postBookRepo.findAllByIsEnabledTrue(pageRequest);
+        return postBookRepo.findAllByIsEnabledTrueOrderByCreatedAtDesc(pageRequest);
     }
 
     public PostBook findById(UUID id) {
@@ -99,6 +99,7 @@ public class PostBookService {
         }
     }
 
+
     public boolean setFavourite(UUID uuid) {
         try {
             PostBook postBook = postBookRepo.findById(uuid).orElseThrow(() -> new ResourceNotFoundException("This post for book does not exist"));
@@ -109,6 +110,7 @@ public class PostBookService {
             throw new ResourceNotFoundException("This post for book does not exist", e.getCause());
         }
     }
+
 
     public boolean unSetFavourite(UUID uuid) {
         try {
@@ -121,13 +123,17 @@ public class PostBookService {
         }
     }
 
+    public List<PostBook> findAllByIsFavourite(UUID bookId) {
+        return postBookRepo.getAllByIsFavouriteTrueAndBook_IdOrderByCreatedAtDesc(bookId);
+    }
+
     public List<PostBook> findAllByIsFavourite() {
-        return postBookRepo.getAllByIsFavouriteTrue();
+        return postBookRepo.getAllByIsFavouriteTrueOrderByCreatedAtDesc();
     }
 
     public Page<PostBook> getNewPosts(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return postBookRepo.findAllByIsEnabledFalse(pageRequest);
+        return postBookRepo.findAllByIsEnabledFalseOrderByCreatedAtDesc(pageRequest);
     }
 
     public Long getPostCount() {
@@ -137,13 +143,15 @@ public class PostBookService {
     public Long getPostCountByBook(UUID bookId){
         return postBookRepo.countByBook_Id(bookId);
     }
-    public List<PostBook> getPostBookByBookId(UUID bookId){
-        return postBookRepo.findAllByBook_Id(bookId);
+    @Transactional
+    public Page<PostBook> getPostBookByBookId(UUID bookId,int page, int size){
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return postBookRepo.findAllByBook_IdOrderByCreatedAtDesc(bookId,pageRequest);
     }
 
     @Transactional
     public Boolean makeEnableAll() {
-        List<PostBook> allByIsEnabled = postBookRepo.findAllByIsEnabled(Boolean.FALSE);
+        List<PostBook> allByIsEnabled = postBookRepo.findAllByIsEnabledOrderByCreatedAtDesc(Boolean.FALSE);
         for (PostBook postBook : allByIsEnabled) {
             postBook.setIsEnabled(true);
             postBookRepo.save(postBook);

@@ -81,7 +81,7 @@ public class PostResourceService {
     public boolean setEnable(UUID uuid) {
         try {
             PostResource postResource = postResourceRepo.findById(uuid).get();
-            postResource.setIsFavourite(true);
+            postResource.setIsEnabled(true);
             postResourceRepo.save(postResource);
             return true;
         } catch (Exception e) {
@@ -91,7 +91,7 @@ public class PostResourceService {
 
     public Page<PostResource> getNewPosts(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return postResourceRepo.findAllByIsEnabled(false, pageRequest);
+        return postResourceRepo.findAllByIsEnabledFalseOrderByCreatedAtDesc( pageRequest);
     }
 
     public Long getPostCount() {
@@ -100,11 +100,15 @@ public class PostResourceService {
 
     public Page<PostResource> getAcceptedPosts(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return postResourceRepo.findAllByIsEnabled(true, pageRequest);
+        return postResourceRepo.findAllByIsEnabledTrueOrderByCreatedAtDesc(pageRequest);
+    }
+
+    public List<PostResource> getFavourite(UUID fileId) {
+        return postResourceRepo.findAllByIsFavouriteTrueAndFile_IdOrderByCreatedAtDesc(fileId);
     }
 
     public List<PostResource> getFavourite() {
-        return postResourceRepo.findAllByIsFavouriteTrue();
+        return postResourceRepo.findAllByIsFavouriteTrueOrderByCreatedAtDesc();
     }
 
     public boolean setFavourite(UUID uuid) {
@@ -131,7 +135,7 @@ public class PostResourceService {
 
     @Transactional
     public Boolean makeEnableAll() {
-        List<PostResource> allByIsEnabled = postResourceRepo.findAllByIsEnabledFalse();
+        List<PostResource> allByIsEnabled = postResourceRepo.findAllByIsEnabledFalseOrderByCreatedAtDesc();
         for (PostResource postResource : allByIsEnabled) {
             postResource.setIsEnabled(true);
             postResourceRepo.save(postResource);
@@ -139,11 +143,9 @@ public class PostResourceService {
         return true;
     }
 
-    @Transactional
-    public List<PostResource> getPostCountByFileId(UUID fileId){
-
-        return postResourceRepo.findAllByFile_Id(fileId);
-
+    public Page<PostResource> getPostByFileId(UUID fileId,int page, int size){
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return postResourceRepo.findAllByFile_IdOrderByCreatedAtDesc(fileId,pageRequest);
     }
 
 }

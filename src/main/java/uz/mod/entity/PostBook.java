@@ -10,6 +10,7 @@ import uz.mod.entity.abstractEntityLayer.AbstractEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
 @EqualsAndHashCode(callSuper = true)
@@ -41,7 +42,7 @@ public class PostBook extends AbstractEntity {
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
     @JsonProperty("bookId")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Book book;
 
 

@@ -7,12 +7,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uz.mod.entity.Book;
 import uz.mod.entity.Email;
 import uz.mod.exceptions.PersistenceException;
 import uz.mod.exceptions.ResourceNotFoundException;
 import uz.mod.repository.BookRepo;
 import uz.mod.repository.EmailRepo;
+import uz.mod.repository.ImageRepo;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -29,6 +31,9 @@ public class EmailService {
     private BookRepo bookRepo;
 
     @Autowired
+    private ImageRepo imageRepo;
+
+    @Autowired
     public JavaMailSenderImpl javaMailSender;
 
     @Value("${app.host}")
@@ -36,13 +41,13 @@ public class EmailService {
 
     public Email save(Email email) {
         try {
-            Email save = emailRepo.save(email);
+            sendWelcomeEmail(email);
             try {
-                sendWelcomeEmail(save);
+               return emailRepo.save(email);
             } catch (Exception e) {
                 e.getCause();
             }
-            return save;
+            return null;
         } catch (Exception e) {
             throw new PersistenceException("persistence failed", e.getCause());
         }
@@ -142,9 +147,10 @@ public class EmailService {
         }
     }
 
-    public void sendNewsEmail(Email email, String bookName) {
+    public void sendNewsEmail(Email email, Book book, String downloadUrl) {
 
         String fullUrl = host + "/api/user/email/unsubscribe/" + email.getId();
+        String webPageUrl = host +"/book/" + book.getId();
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = null;
         try {
@@ -163,10 +169,10 @@ public class EmailService {
                             "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">" +
                             "    <tr>" +
                             "        <td style=\"padding: 10px 0 30px 0;\">" +
-                            "            <table align=\"center\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"600\" style=\"border: 1px solid #cccccc; border-collapse: collapse;\">" +
+                            "            <table align=\"center\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"400\" style=\"border: 1px solid #cccccc; border-collapse: collapse;\">" +
                             "                <tr>" +
                             "                    <td align=\"center\" bgcolor=\"#70bbd9\" style=\"padding: 40px 0 30px 0; color: #153643; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;\">" +
-                            "                        <img src=\"https://s3-us-west-2.amazonaws.com/s.cdpn.io/210284/h1.gif\" alt=\"Creating Email Magic\" width=\"300\" height=\"230\" style=\"display: block;\" />" +
+                            "                      <a href=\"" + webPageUrl + "\">  <img src=\"" +  downloadUrl + "\" alt=\"" + book.getNameUz() + "\" width=\"270\" height=\"377\" style=\"display: block;\" /> </a>" +
                             "                    </td>" +
                             "                </tr>" +
                             "                <tr>" +
@@ -184,7 +190,7 @@ public class EmailService {
                             "                             </tr>" +
                             "                              <tr>" +
                             "                                  <td style=\"padding: 20px 0 30px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;\">" +
-                            "                                    Bu elektron xat yuborishdan asosiy maqsadimiz sizni yangi e'lon qilingan va Milliy O`quv Dasturi tomonidan tastiqlangan kitob: " + bookName +
+                            "                                    Bu elektron xat yuborishdan asosiy maqsadimiz sizni yangi e'lon qilingan va Milliy O`quv Dasturi tomonidan tastiqlangan kitob: <a href=\"" + webPageUrl + "\">" + book.getNameUz() +"</a>"+
                             "                                       bilan tanishtirishdan iborat. E`tiboringiz uchun rahmat." +
                             "                                    </td>" +
                             "                            </tr>" +
@@ -217,11 +223,13 @@ public class EmailService {
         }
     }
 
+    @Transactional
     public Boolean sentEmailAboutBook(UUID bookId) {
         Book book = bookRepo.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("This book does not exist"));
+        String downloadUrl = book.getImage().getDownloadUrl();
         List<Email> allEmails = emailRepo.findAll();
         for (Email email : allEmails) {
-            sendNewsEmail(email, book.getNameUz());
+            sendNewsEmail(email, book,downloadUrl);
         }
         return true;
     }

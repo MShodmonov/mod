@@ -25,7 +25,6 @@ public class PostConceptionModel {
 
     private String description;
 
-
     private UUID detailId;
 
     public PostConceptionModel(PostConception postConception) {

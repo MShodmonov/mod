@@ -4,9 +4,11 @@ package uz.mod.controller.admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import uz.mod.entity.Category;
 import uz.mod.entity.PostConception;
 import uz.mod.entity.Subject;
 import uz.mod.payload.Result;
+import uz.mod.service.CategoryService;
 import uz.mod.service.PostConceptionService;
 import uz.mod.service.SubjectService;
 
@@ -19,6 +21,10 @@ import java.util.UUID;
 public class SubjectController {
     @Autowired
     private SubjectService subjectService;
+
+    @Autowired
+    private CategoryService categoryService;
+
 
     @PostMapping("/")
     public Subject postSubject(@Valid @RequestBody Subject subject) {
@@ -48,6 +54,12 @@ public class SubjectController {
     @GetMapping("/list")
     private List<Subject> getSubjectList() {
         return subjectService.getAllSubject();
+    }
+
+    @GetMapping("/category/{id}")
+    public List<Subject> getSubjectListByCategoryId(@PathVariable UUID id) {
+        Category category = categoryService.findById(id);
+        return subjectService.getSubjectsByCategory(category);
     }
 
 

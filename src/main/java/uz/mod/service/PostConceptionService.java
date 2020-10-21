@@ -96,7 +96,7 @@ public class PostConceptionService {
     public boolean setEnable(UUID uuid) {
         try {
             PostConception postConception = postConceptionRepo.findById(uuid).get();
-            postConception.setIsFavourite(true);
+            postConception.setIsEnabled(true);
             postConceptionRepo.save(postConception);
             return true;
         } catch (Exception e) {
@@ -106,7 +106,7 @@ public class PostConceptionService {
 
     public Page<PostConception> getNewPosts(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return postConceptionRepo.findAllByIsEnabled(false, pageRequest);
+        return postConceptionRepo.findAllByIsEnabledOrderByCreatedAtDesc(false, pageRequest);
     }
 
     public Long getPostCount() {
@@ -115,11 +115,15 @@ public class PostConceptionService {
 
     public Page<PostConception> getAcceptedPosts(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return postConceptionRepo.findAllByIsEnabled(true, pageRequest);
+        return postConceptionRepo.findAllByIsEnabledOrderByCreatedAtDesc(true, pageRequest);
     }
 
     public List<PostConception> getFavourite() {
-        return postConceptionRepo.findAllByIsFavouriteTrue();
+        return postConceptionRepo.findAllByIsFavouriteTrueOrderByCreatedAtDesc();
+    }
+
+    public List<PostConception> getFavourite(UUID detailsId) {
+        return postConceptionRepo.findAllByIsFavouriteTrueAndDetails_IdOrderByCreatedAtDesc(detailsId);
     }
 
     public boolean setFavourite(UUID uuid) {
@@ -146,7 +150,7 @@ public class PostConceptionService {
 
     @Transactional
     public Boolean makeEnableAll() {
-        List<PostConception> allByIsEnabled = postConceptionRepo.findAllByIsEnabledFalse();
+        List<PostConception> allByIsEnabled = postConceptionRepo.findAllByIsEnabledFalseOrderByCreatedAtDesc();
         for (PostConception postConception : allByIsEnabled) {
             postConception.setIsEnabled(true);
             postConceptionRepo.save(postConception);
@@ -163,6 +167,10 @@ public class PostConceptionService {
             postCountList.add(new PostCount(category.getNameUz(),category.getNameRu(),Math.toIntExact(count),category.getId()));
         }
         return postCountList;
+    }
+
+    public List<PostConception> getPostConceptionByDetailsId (UUID detailsId){
+        return postConceptionRepo.findAllByDetails_IdOrderByCreatedAtDesc(detailsId);
     }
 
 

@@ -54,6 +54,7 @@ public class PdfController {
     @DeleteMapping("/delete/{id}")////////////////////
     public Result deletePostBook(@PathVariable UUID id) {
         Pdf pdf = fileStorageService.getPdf(id);
+        fileStorageService.deletePdf(id);
         return new Result(fileStorageService.deleteFile(pdf.getFileName()));
     }
 

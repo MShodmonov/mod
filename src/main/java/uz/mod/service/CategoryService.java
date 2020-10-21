@@ -10,7 +10,10 @@ import uz.mod.exceptions.PersistenceException;
 import uz.mod.exceptions.ResourceNotFoundException;
 import uz.mod.repository.CategoryRepo;
 import uz.mod.repository.ConceptionRepo;
+import uz.mod.repository.SubjectRepo;
 
+import java.net.PortUnreachableException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -18,6 +21,9 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepo categoryRepo;
+
+    @Autowired
+    private SubjectRepo subjectRepo;
 
     public Category save(Category category) {
         try {
@@ -50,6 +56,5 @@ public class CategoryService {
         } catch (Exception e) {
             throw new ResourceNotFoundException("This conception does not exist", e.getCause());
         }
-
     }
 }
